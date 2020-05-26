@@ -15,6 +15,7 @@ import Header from './layout/Header';
 import Dashboard from './leads/Dashboard';
 import Login from './accounts/Login';
 import Register from './accounts/Register';
+import { loadUser } from '../actions/auth';
 
 
 // Alert Options
@@ -24,6 +25,9 @@ const alertOptions = {
 }
 
 class App extends Component {
+    componentDidMount() {
+        store.dispatch(loadUser());
+    }
     render() {
         return (
             <Provider store={store}>

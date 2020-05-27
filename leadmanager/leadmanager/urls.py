@@ -15,7 +15,6 @@ def api_root(request, format=None):
 
 urlpatterns = [
     path('', include('frontend.urls')),
-    path('', include('leads.urls')),
     path('', include('accounts.urls')),
 ]
 

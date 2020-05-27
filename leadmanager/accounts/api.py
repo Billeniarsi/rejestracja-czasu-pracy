@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from knox.models import AuthToken
@@ -46,4 +47,7 @@ class UserAPI(generics.RetrieveAPIView):
         ##up to this point - things that were set up already
 
 class UserListAPI(generics.ListAPIView):
+    queryset = User.objects.all()
     serializer_class = UserListSerializer
+
+    permission_classes = [permissions.AllowAny]

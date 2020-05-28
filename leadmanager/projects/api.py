@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, filters, permissions
 from .models import Project, Task
 from .serializers import ProjectListSerialzier, TaskListSerializer
 
@@ -14,13 +14,20 @@ class ProjectDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
 
 
 class TaskListAPI(generics.ListCreateAPIView):
-    queryset = Task.objects.all()
     serializer_class = TaskListSerializer
+    filter_backends = [filters.SearchFilter]
+
+    def get_queryset(self):
+        pk = self.kwargs['project_id']
+        return Task.objects.filter(project__id=pk)
 
 
 class TaskDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Task.objects.all()
     serializer_class = TaskListSerializer
+
+    def get_queryset(self):
+        project_id = self.kwargs['project_id']
+        return Task.objects.filter(project__id=project_id)
 
 
 

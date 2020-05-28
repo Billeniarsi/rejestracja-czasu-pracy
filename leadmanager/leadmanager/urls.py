@@ -10,8 +10,9 @@ from projects import urls as projects_urls
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
-        'Users API': reverse('users-api', request=request, format=format),
-        'Projects API': reverse('projects-api', request=request, format=format),
+        'Users list': reverse('user-list', request=request, format=format),
+        'Projects list': reverse('project-list', request=request, format=format),
+        'Tasks list': reverse('task-list', request=request, format=format),
     })
 
 
@@ -24,7 +25,7 @@ urlpatterns += [
     path('admin/', admin.site.urls),
     path('api-auth/', include('rest_framework.urls')),
     path('api/', api_root, name='api-root'),
-    path('api/users', include(users_urls), name='users-api'),
-    path('api/projects', include(projects_urls), name='projects-api'),
+    path('api/users/', include(users_urls), name='users-api'),
+    path('api/projects/', include(projects_urls), name='projects-api'),
 ]
 

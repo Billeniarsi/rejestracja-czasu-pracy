@@ -4,12 +4,14 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from users import urls as users_urls
+from projects import urls as projects_urls
 
 
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
         'Users API': reverse('users-api', request=request, format=format),
+        'Projects API': reverse('projects-api', request=request, format=format),
     })
 
 
@@ -23,5 +25,6 @@ urlpatterns += [
     path('api-auth/', include('rest_framework.urls')),
     path('api/', api_root, name='api-root'),
     path('api/users', include(users_urls), name='users-api'),
+    path('api/projects', include(projects_urls), name='projects-api'),
 ]
 

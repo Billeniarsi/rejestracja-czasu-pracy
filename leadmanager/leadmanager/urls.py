@@ -13,6 +13,7 @@ def api_root(request, format=None):
         'Users list': reverse('user-list', request=request, format=format),
         'Projects list': reverse('project-list', request=request, format=format),
         'Reports list': reverse('report-list', request=request, format=format),
+        'Summaries list': reverse('summary-list', request=request, format=format),
     })
 
 

@@ -1,47 +1,28 @@
 from rest_framework import generics, filters, permissions
 from .models import Project, Task
 from .serializers import ProjectListSerialzier, TaskListSerializer
-from users.permissions import IsStaffMember
+from users.permissions import IsStaffMemberOrReadOnly
 
 
-class ProjectListAPI(generics.ListAPIView):
+class ProjectListAPI(generics.ListCreateAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectListSerialzier
 
+    permission_classes = [IsStaffMemberOrReadOnly]
 
-class ProjectCreateAPI(generics.CreateAPIView):
+
+class ProjectDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectListSerialzier
 
-    permission_classes = [IsStaffMember]
+    permission_classes = [IsStaffMemberOrReadOnly]
 
 
-class ProjectDetailsAPI(generics.RetrieveAPIView):
-    queryset = Project.objects.all()
-    serializer_class = ProjectListSerialzier
-
-
-class ProjectUpdateAPI(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Project.objects.all()
-    serializer_class = ProjectListSerialzier
-
-    permission_classes = [IsStaffMember]
-
-
-class TaskListAPI(generics.ListAPIView):
+class TaskListAPI(generics.ListCreateAPIView):
     serializer_class = TaskListSerializer
     filter_backends = [filters.SearchFilter]
 
-    def get_queryset(self):
-        pk = self.kwargs['project_id']
-        return Task.objects.filter(project__id=pk)
-
-
-class TaskCreateAPI(generics.CreateAPIView):
-    serializer_class = TaskListSerializer
-    filter_backends = [filters.SearchFilter]
-
-    permission_classes = [IsStaffMember]
+    permission_classes = [IsStaffMemberOrReadOnly]
 
     def get_queryset(self):
         pk = self.kwargs['project_id']
@@ -51,18 +32,10 @@ class TaskCreateAPI(generics.CreateAPIView):
         serializer.save(project=Project.objects.get(id=self.kwargs['project_id']))
 
 
-class TaskDetailsAPI(generics.RetrieveAPIView):
+class TaskDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TaskListSerializer
 
-    def get_queryset(self):
-        project_id = self.kwargs['project_id']
-        return Task.objects.filter(project__id=project_id)
-
-
-class TaskUpdateAPI(generics.RetrieveUpdateDestroyAPIView):
-    serializer_class = TaskListSerializer
-
-    permission_classes = [IsStaffMember]
+    permission_classes = [IsStaffMemberOrReadOnly]
 
     def get_queryset(self):
         project_id = self.kwargs['project_id']

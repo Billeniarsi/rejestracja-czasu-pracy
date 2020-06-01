@@ -12,7 +12,6 @@ def api_root(request, format=None):
     return Response({
         'Users list': reverse('user-list', request=request, format=format),
         'Projects list': reverse('project-list', request=request, format=format),
-        'Project create': reverse('project-create', request=request, format=format),
         'Reports list': reverse('report-list', request=request, format=format),
         'Summaries list': reverse('overview-list', request=request, format=format),
     })

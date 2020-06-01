@@ -1,8 +1,12 @@
 from rest_framework import permissions
 
 
-class IsStaffMember(permissions.BasePermission):
+class IsStaffMemberOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
         user = request.user
-        return user.is_staff
+
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        else:
+            return user.is_staff
 

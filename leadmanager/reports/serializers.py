@@ -8,6 +8,7 @@ class ReportListSerialzier(serializers.ModelSerializer):
     class Meta:
         model = Report
         fields = ['id', 'employee', 'project', 'task', 'date', 'time', 'overtime', 'is_accepted']
+        extra_kwargs = {'employee': {'read_only': True}, 'is_accepted': {'read_only': True}}
 
     def get_project(self, obj):
         return obj.task.project.id

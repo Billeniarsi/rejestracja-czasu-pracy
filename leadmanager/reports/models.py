@@ -10,7 +10,7 @@ class Report(models.Model):
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     date = models.DateField(blank=False)
     time = models.PositiveIntegerField(blank=False)
-    overtime = models.PositiveIntegerField(blank=True)
+    overtime = models.PositiveIntegerField(blank=False)
     is_accepted = models.BooleanField(blank=False, default=False)
 
 

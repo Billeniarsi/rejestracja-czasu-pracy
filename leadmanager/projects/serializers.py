@@ -9,9 +9,8 @@ class ProjectListSerialzier(serializers.ModelSerializer):
 
 
 class TaskListSerializer(serializers.ModelSerializer):
-    project = ProjectListSerialzier
 
     class Meta:
         model = Task
         fields = ['id', 'project', 'name', 'description']
-
+        extra_kwargs = {'project': {'read_only': True}}

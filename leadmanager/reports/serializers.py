@@ -3,9 +3,14 @@ from .models import Report, Summary
 
 
 class ReportListSerialzier(serializers.ModelSerializer):
+    project = serializers.SerializerMethodField()
+
     class Meta:
         model = Report
-        fields = ['id', 'employee', 'task', 'date', 'time', 'overtime', 'is_accepted']
+        fields = ['id', 'employee', 'project', 'task', 'date', 'time', 'overtime', 'is_accepted']
+
+    def get_project(self, obj):
+        return obj.task.project.id
 
 
 class SummaryListSerializer(serializers.ModelSerializer):

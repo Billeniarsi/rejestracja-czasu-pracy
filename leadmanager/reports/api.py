@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions
-from .models import Report, Summary
-from .serializers import ReportListSerialzier, SummaryListSerializer
+from .models import Report, Overview
+from .serializers import ReportListSerialzier, OverviewListSerializer
 
 
 class ReportListAPI(generics.ListCreateAPIView):
@@ -33,16 +33,16 @@ class ReportDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
 
-class SummaryListAPI(generics.ListCreateAPIView):
-    queryset = Summary.objects.all()
-    serializer_class = SummaryListSerializer
+class OverviewListAPI(generics.ListCreateAPIView):
+    queryset = Overview.objects.all()
+    serializer_class = OverviewListSerializer
 
     permission_classes = [permissions.IsAuthenticated]
 
 
-class SummaryDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Summary.objects.all()
-    serializer_class = SummaryListSerializer
+class OverviewDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Overview.objects.all()
+    serializer_class = OverviewListSerializer
 
     permission_classes = [permissions.IsAuthenticated]
 

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Report, Summary
+from .models import Report, Overview
 
 
 class ReportListSerialzier(serializers.ModelSerializer):
@@ -14,12 +14,12 @@ class ReportListSerialzier(serializers.ModelSerializer):
         return obj.task.project.id
 
 
-class SummaryListSerializer(serializers.ModelSerializer):
+class OverviewListSerializer(serializers.ModelSerializer):
     time = serializers.SerializerMethodField()
     #overtime=serializers.SerializerMethodField()
 
     class Meta:
-        model = Summary
+        model = Overview
         fields = ['id', 'project', 'employee', 'start_date', 'end_date', 'time'] #, 'overtime']
 
     def get_time(self, obj):

@@ -1,11 +1,11 @@
 from django.urls import path
-from .api import ReportListAPI, ReportDetailsAPI, SummaryListAPI, SummaryDetailsAPI
+from .api import ReportListAPI, ReportDetailsAPI, OverviewListAPI, OverviewDetailsAPI
 
 
 urlpatterns = [
     path('', ReportListAPI.as_view(), name='report-list'),
     path('<int:pk>/', ReportDetailsAPI.as_view(), name='report-details'),
-    path('summaries/', SummaryListAPI.as_view(), name='summary-list'),
-    path('summaries/<int:pk>/', SummaryDetailsAPI.as_view(), name='summary-details'),
+    path('overviews/', OverviewListAPI.as_view(), name='overview-list'),
+    path('overviews/<int:pk>/', OverviewDetailsAPI.as_view(), name='overview-details'),
 ]
 

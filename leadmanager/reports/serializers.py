@@ -23,12 +23,12 @@ class SummaryListSerializer(serializers.ModelSerializer):
         fields = ['id', 'project', 'employee', 'start_date', 'end_date', 'time'] #, 'overtime']
 
     def get_time(self, obj):
-        if obj.project is not None and obj.worker is not None:
+        if obj.project is not None and obj.employee is not None:
             reports = Report.objects.filter(task__project=obj.project, employee=obj.employee)
         elif obj.project is not None:
             reports = Report.objects.filter(task__project=obj.project)
         else:
-            reports = Report.objects.filter(sender=obj.employee)
+            reports = Report.objects.filter(employee=obj.employee)
 
         time = 0
         for report in reports:

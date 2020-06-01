@@ -47,15 +47,22 @@ class ReportUpdateAPI(generics.RetrieveUpdateDestroyAPIView):
 
 
 class OverviewListAPI(generics.ListCreateAPIView):
-    queryset = Overview.objects.all()
+    #queryset = Overview.objects.all()
     serializer_class = OverviewListSerializer
 
     permission_classes = [permissions.IsAuthenticated]
 
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            queryset = Overview.objects.all()
+        else:
+            queryset = Overview.objects.filter(employee=self.request.user)
 
-class OverviewDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Overview.objects.all()
-    serializer_class = OverviewListSerializer
+        return queryset
 
-    permission_classes = [permissions.IsAuthenticated]
+    def perform_create(self, serializer):
+        if not self.request.user.is_staff:
+            serializer.save(employee=self.request.user)
+        else:
+            serializer.save()
 

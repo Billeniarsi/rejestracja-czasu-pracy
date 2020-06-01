@@ -1,5 +1,4 @@
 from rest_framework import generics, permissions
-from users.permissions import IsStaffMember
 from .models import Report, Overview
 from .serializers import ReportListSerialzier, OverviewListSerializer
 from .permissions import IsReportSender, IsReportSenderOrStaffMember, ReportNotAccepted
@@ -47,7 +46,6 @@ class ReportUpdateAPI(generics.RetrieveUpdateDestroyAPIView):
 
 
 class OverviewListAPI(generics.ListCreateAPIView):
-    #queryset = Overview.objects.all()
     serializer_class = OverviewListSerializer
 
     permission_classes = [permissions.IsAuthenticated]

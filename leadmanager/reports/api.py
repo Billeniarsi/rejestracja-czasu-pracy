@@ -1,6 +1,8 @@
 from rest_framework import generics, permissions
+from users.permissions import IsStaffMember
 from .models import Report, Overview
 from .serializers import ReportListSerialzier, OverviewListSerializer
+from .permissions import IsReportSender, IsReportSenderOrStaffMember, ReportNotAccepted
 
 
 class ReportListAPI(generics.ListCreateAPIView):
@@ -30,11 +32,18 @@ class ReportListAPI(generics.ListCreateAPIView):
         return queryset
 
 
-class ReportDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
+class ReportDetailsAPI(generics.RetrieveAPIView):
     queryset = Report.objects.all()
     serializer_class = ReportListSerialzier
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsReportSenderOrStaffMember]
+
+
+class ReportUpdateAPI(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Report.objects.all()
+    serializer_class = ReportListSerialzier
+
+    permission_classes = [IsReportSender, ReportNotAccepted]
 
 
 class OverviewListAPI(generics.ListCreateAPIView):

@@ -6,7 +6,7 @@ from projects.models import Project, Task
 
 
 class Report(models.Model):
-    sender = models.ForeignKey(User, on_delete=models.CASCADE)
+    employee = models.ForeignKey(User, on_delete=models.CASCADE)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
     date = models.DateField(blank=False)
     time = models.PositiveIntegerField(blank=False)
@@ -16,7 +16,7 @@ class Report(models.Model):
 
 class Summary(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
-    worker = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    employee = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     start_date = models.DateField(blank=False)
     end_date = models.DateField(blank=False)
 

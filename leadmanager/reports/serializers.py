@@ -5,7 +5,7 @@ from .models import Report, Summary
 class ReportListSerialzier(serializers.ModelSerializer):
     class Meta:
         model = Report
-        fields = ['id', 'sender', 'task', 'date', 'time', 'overtime', 'is_accepted']
+        fields = ['id', 'employee', 'task', 'date', 'time', 'overtime', 'is_accepted']
 
 
 class SummaryListSerializer(serializers.ModelSerializer):
@@ -14,16 +14,15 @@ class SummaryListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Summary
-        fields = ['id', 'project', 'worker', 'start_date', 'end_date', 'time'] #, 'overtime']
+        fields = ['id', 'project', 'employee', 'start_date', 'end_date', 'time'] #, 'overtime']
 
     def get_time(self, obj):
-        type_of_summary = 0
         if obj.project is not None and obj.worker is not None:
-            reports = Report.objects.filter(task__project=obj.project, sender=obj.worker)
+            reports = Report.objects.filter(task__project=obj.project, employee=obj.employee)
         elif obj.project is not None:
             reports = Report.objects.filter(task__project=obj.project)
         else:
-            reports = Report.objects.filter(sender=obj.worker)
+            reports = Report.objects.filter(sender=obj.employee)
 
         time = 0
         for report in reports:

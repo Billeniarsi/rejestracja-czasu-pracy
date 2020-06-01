@@ -12,7 +12,11 @@ class ReportListAPI(generics.ListCreateAPIView):
         serializer.save(employee=self.request.user)
 
     def get_queryset(self):
-        queryset = Report.objects.all()
+        if self.request.user.is_staff:
+            queryset = Report.objects.all()
+        else:
+            queryset = Report.objects.filter(employee=self.request.user)
+
         employee = self.request.query_params.get('employee', None)
         project = self.request.query_params.get('project', None)
         date = self.request.query_params.get('date', None)

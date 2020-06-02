@@ -34,7 +34,7 @@ export class Login extends Component {
                     <h2 className="text-center">Login</h2>
                     <form onSubmit={this.onSubmit}>
                         <div className="form-group">
-                            <label>Username</label>
+                            <label>Nazwa użytkownika</label>
                             <input
                                 type="text"
                                 className="form-control"
@@ -44,7 +44,7 @@ export class Login extends Component {
                             />
                         </div>
                         <div className="form-group">
-                            <label>Password</label>
+                            <label>Hasło</label>
                             <input
                                 type="password"
                                 className="form-control"
@@ -55,12 +55,12 @@ export class Login extends Component {
                         </div>
                         <div className="form-group">
                             <button type="submit" className="btn btn-primary">
-                                Login
+                                Zaloguj się
                             </button>
                         </div>
-                        <p>
+                        {/* <p>
                             Don't have an account? <Link to="/login">Login</Link>
-                        </p>
+                        </p> */}
                     </form>
                 </div>
             </div>

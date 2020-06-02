@@ -7,7 +7,6 @@ node_modules
 __pycache__/
 local_settings.py
 media
-db.sqlite3
 .idea
 
 # If your build process includes running collectstatic, then you probably don't need or want to include staticfiles/

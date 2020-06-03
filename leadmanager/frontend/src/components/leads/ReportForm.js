@@ -28,7 +28,7 @@ export class ReportForm extends Component {
             <div>
                 <form onSubmit={this.onSubmit}>
                     <div className="row align-content-center">
-                        <div class="col-xl-2 mb-3 mr-4">
+                        <div className="col-xl-2 mb-3 mr-4">
                             Data początku raportu
                             <input
                                 placeholder="YYYY-MM-DD"
@@ -39,7 +39,7 @@ export class ReportForm extends Component {
                                 value={name}
                             />
                         </div>
-                        <div class="col-xl-2">
+                        <div className="col-xl-2">
                             Data końca raportu
                             <input
                                 placeholder="YYYY-MM-DD"

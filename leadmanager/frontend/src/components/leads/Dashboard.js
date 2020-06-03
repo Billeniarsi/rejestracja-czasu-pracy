@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react'
+import ReportForm from "./ReportForm";
 
 export default function Dashboard() {
     return (
@@ -9,13 +10,13 @@ export default function Dashboard() {
                         <div class="container-fluid">
                             <h1 class="mt-4">Podsumowanie okresu</h1>
                             <ol class="breadcrumb mb-4">
-                                <li class="breadcrumb-item active">Wybierz dane aby podejrzeć podsumowanie z danego okresu.</li>
+                                <li class="breadcrumb-item active">Wybierz datę, aby podejrzeć podsumowanie z tego okresu.</li>
                             </ol>
                             <div class="row">
                                 <div class="col-xl-4 col-md-6">
                                     <div class="card bg-primary text-white mb-4">
                                         <div class="card-footer d-flex align-items-center justify-content-between">
-                                            <a class="small text-white stretched-link" href="#">Wyświetl podsumowanie</a>
+                                            <a class="small text-white stretched-link" href="#">Podsumowanie okresu</a>
                                             <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                                         </div>
                                     </div>
@@ -39,10 +40,9 @@ export default function Dashboard() {
                                     </div>
                                 </div>
                             </div>
-                            <p>Data początku okresu <input data-role="datepicker"></input></p>
-                            <p>Data końca okresu    <input data-role="datepicker"></input></p>
-                            <p>Wybierz projekt    <select data-role="datepicker"><option>Wszystkie</option></select></p>
-                            <p><button>Pokaż raport</button></p>
+                            <ReportForm />
+
+
                             <div class="card mb-4">
                                 <div class="card-header"><i class="fas fa-table mr-1"></i>Raport od dnia: 28.05.2020, do dnia: 28.05.2020</div>
                                 <div class="card-body">
@@ -73,6 +73,7 @@ export default function Dashboard() {
                                                 </tr>
                                             </tbody>
                                         </table>
+                                        <p>Wybierz projekt    <select><option>Wszystkie</option></select></p>
                                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                                             <thead>
                                                 <tr>

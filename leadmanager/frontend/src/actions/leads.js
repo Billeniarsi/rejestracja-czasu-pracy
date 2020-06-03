@@ -1,7 +1,6 @@
 import axios from "axios";
 import { createMessage, returnErrors } from './messages';
 import { tokenConfig } from './auth';
-
 import { GET_LEADS, ADD_LEAD, DELETE_LEAD, GET_ERRORS } from "./types";
 
 // GET LEADS

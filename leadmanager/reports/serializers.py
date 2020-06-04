@@ -44,6 +44,13 @@ class OverviewListSerializer(serializers.ModelSerializer):
         model = Overview
         fields = ['id', 'project', 'project_name', 'employee', 'employee_username', 'start_date', 'end_date', 'time', 'overtime', 'tasks']
 
+    def validate(self, attrs):
+        if self.context['request'].user.is_staff and attrs['project'] is None and attrs['employee'] is None:
+            raise serializers.ValidationError("Musisz podać projekt lub pracownika, dla których chcesz wyświetlić podgląd.")
+        if attrs['end_date'] < attrs['start_date']:
+            raise serializers.ValidationError("Data końca podglądu musi być późniejsza niż data jego rozpoczęcia.")
+        return attrs
+
     def get_project_name(self, obj):
         if obj.project is not None:
             return obj.project.name
@@ -120,8 +127,13 @@ class SummaryListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Summary
-        fields = ['id', 'employee', 'start_date', 'end_date', 'is_accepted', 'details']
+        fields = ['id','employee', 'start_date', 'end_date', 'is_accepted', 'details']
         extra_kwargs = {'employee': {'read_only': True}, 'is_accepted': {'read_only': True}}
+
+    def validate(self, attrs):
+        if attrs['end_date'] < attrs['start_date']:
+            raise serializers.ValidationError("Data końca podsumowania musi być późniejsza niż data jego rozpoczęcia.")
+        return attrs
 
     def get_details(self, obj):
         details = {'time': 0, 'overtime': 0, 'projects': []}

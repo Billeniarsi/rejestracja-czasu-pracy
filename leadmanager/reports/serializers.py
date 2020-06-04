@@ -47,7 +47,7 @@ class OverviewListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Overview
-        fields = ['project', 'project_name', 'start_date', 'end_date', 'details']
+        fields = ['start_date', 'end_date', 'project', 'project_name',  'details']
         extra_kwargs = {'project': {'read_only': True}}
 
     def validate(self, attrs):

@@ -1,11 +1,12 @@
 from rest_framework import generics, permissions
 from django.contrib.auth.models import User
 
+from users.permissions import IsStaffMember
 from projects.models import Project
 
 from .models import Report, Overview, Summary
 from .serializers import ReportListSerialzier, OverviewListSerializer, SummaryListSerializer
-from .permissions import IsReportSender, IsReportSenderOrStaffMember, ReportNotAccepted
+from .permissions import IsReportSender, IsReportSenderOrStaffMember, ReportNotAccepted, IsSelfOrStaffMember
 
 
 class ReportListAPI(generics.ListCreateAPIView):
@@ -45,26 +46,26 @@ class ReportDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
 class OverviewListAPI(generics.ListCreateAPIView):
     serializer_class = OverviewListSerializer
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsStaffMember]
 
     def get_queryset(self):
-        pk = self.kwargs['pk']
+        pk = self.kwargs['project_id']
         return Overview.objects.filter(project__id=pk)
 
     def perform_create(self, serializer):
-        serializer.save(project=Project.objects.get(id=self.kwargs['pk']))
+        serializer.save(project=Project.objects.get(id=self.kwargs['project_id']))
 
 
 class SummaryListAPI(generics.ListCreateAPIView):
     serializer_class = SummaryListSerializer
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsSelfOrStaffMember]
 
     def get_queryset(self):
-        pk = self.kwargs['pk']
+        pk = self.kwargs['user_id']
         return Summary.objects.filter(employee__id=pk)
 
     def perform_create(self, serializer):
-        serializer.save(employee=User.objects.get(id=self.kwargs['pk']))
+        serializer.save(employee=User.objects.get(id=self.kwargs['user_id']))
 
 

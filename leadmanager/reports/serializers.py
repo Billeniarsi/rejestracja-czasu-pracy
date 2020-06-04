@@ -35,17 +35,21 @@ class ReportListSerialzier(serializers.ModelSerializer):
 
 class OverviewListSerializer(serializers.ModelSerializer):
 
+    project_name = serializers.SerializerMethodField()
     details = serializers.SerializerMethodField()
 
     class Meta:
         model = Overview
-        fields = ['id', 'project', 'start_date', 'end_date', 'details']
+        fields = ['id', 'project', 'project_name', 'start_date', 'end_date', 'details']
         extra_kwargs = {'project': {'read_only': True}}
 
     def validate(self, attrs):
         if attrs['end_date'] < attrs['start_date']:
             raise serializers.ValidationError("Data końca podglądu musi być późniejsza niż data jego rozpoczęcia.")
         return attrs
+
+    def get_project_name(self, obj):
+        return obj.project.name
 
     def get_details(self, obj):
         details = {'time': 0, 'overtime': 0, 'tasks': []}
@@ -54,10 +58,10 @@ class OverviewListSerializer(serializers.ModelSerializer):
         for report in reports:
             add_task = True
             details['time'] += report.time
-            details['overtime'] = report.overtime
+            details['overtime'] += report.overtime
 
             for task in details['tasks']:
-                if task == report.task:
+                if task['id'] == report.task.id:
                     add_task = False
                     task['time'] += report.time
                     task['overtime'] += report.overtime

@@ -34,101 +34,49 @@ class ReportListSerialzier(serializers.ModelSerializer):
 
 
 class OverviewListSerializer(serializers.ModelSerializer):
-    project_name = serializers.SerializerMethodField()
-    employee_username = serializers.SerializerMethodField()
-    time = serializers.SerializerMethodField()
-    overtime = serializers.SerializerMethodField()
-    tasks = serializers.SerializerMethodField()
+
+    details = serializers.SerializerMethodField()
 
     class Meta:
         model = Overview
-        fields = ['id', 'project', 'project_name', 'employee', 'employee_username', 'start_date', 'end_date', 'time', 'overtime', 'tasks']
+        fields = ['id', 'project', 'start_date', 'end_date', 'details']
+        extra_kwargs = {'project': {'read_only': True}}
 
     def validate(self, attrs):
-        if self.context['request'].user.is_staff and attrs['project'] is None and attrs['employee'] is None:
-            raise serializers.ValidationError("Musisz podać projekt lub pracownika, dla których chcesz wyświetlić podgląd.")
         if attrs['end_date'] < attrs['start_date']:
             raise serializers.ValidationError("Data końca podglądu musi być późniejsza niż data jego rozpoczęcia.")
         return attrs
 
-    def get_project_name(self, obj):
-        if obj.project is not None:
-            return obj.project.name
-        else:
-            return None
+    def get_details(self, obj):
+        details = {'time': 0, 'overtime': 0, 'tasks': []}
+        reports = Report.objects.filter(task__project=obj.project, date__range=[obj.start_date, obj.end_date])
 
-    def get_employee_username(self, obj):
-        if obj.employee is not None:
-            return obj.employee.username
-        else:
-            return None
-
-    def get_tasks(self, obj):
-        if obj.project is not None and obj.employee is not None:
-            reports = Report.objects.filter(task__project=obj.project, employee=obj.employee, date__range=[obj.start_date, obj.end_date])
-        elif obj.project is not None:
-            reports = Report.objects.filter(task__project=obj.project, date__range=[obj.start_date, obj.end_date])
-        else:
-            reports = Report.objects.filter(employee=obj.employee, date__range=[obj.start_date, obj.end_date])
-
-        tasks = []
         for report in reports:
             add_task = True
-            for task in tasks:
-                if task['id'] == report.task.id:
+            details['time'] += report.time
+            details['overtime'] = report.overtime
+
+            for task in details['tasks']:
+                if task == report.task:
                     add_task = False
                     task['time'] += report.time
                     task['overtime'] += report.overtime
                     break
 
             if add_task:
-                tasks.append({'id': report.task.id, 'project': report.task.project.id, 'name': report.task.name, 'time': report.time, 'overtime': report.overtime})
+                details['tasks'].append({'id': report.task.id, 'name': report.task.name, 'time': report.time, 'overtime': report.overtime})
 
-        return tasks
-
-    def get_time(self, obj):
-        if obj.project is not None and obj.employee is not None:
-            reports = Report.objects.filter(task__project=obj.project, employee=obj.employee, date__range=[obj.start_date, obj.end_date])
-        elif obj.project is not None:
-            reports = Report.objects.filter(task__project=obj.project, date__range=[obj.start_date, obj.end_date])
-        else:
-            reports = Report.objects.filter(employee=obj.employee, date__range=[obj.start_date, obj.end_date])
-
-        time = 0
-        for report in reports:
-            time += report.time
-
-        return time
-
-    def get_overtime(self, obj):
-        if obj.project is not None and obj.employee is not None:
-            reports = Report.objects.filter(task__project=obj.project, employee=obj.employee, date__range=[obj.start_date, obj.end_date])
-        elif obj.project is not None:
-            reports = Report.objects.filter(task__project=obj.project, date__range=[obj.start_date, obj.end_date])
-        else:
-            reports = Report.objects.filter(employee=obj.employee, date__range=[obj.start_date, obj.end_date])
-
-        overtime = 0
-        for report in reports:
-            overtime += report.overtime
-
-        return overtime
+        return details
 
 
 class SummaryListSerializer(serializers.ModelSerializer):
-    """
-    time = serializers.SerializerMethodField()
-    overtime = serializers.SerializerMethodField()
-    projects = serializers.SerializerMethodField()
-    tasks = serializers.SerializerMethodField()
-    """
 
     details = serializers.SerializerMethodField()
 
     class Meta:
         model = Summary
-        fields = ['id','employee', 'start_date', 'end_date', 'is_accepted', 'details']
-        extra_kwargs = {'employee': {'read_only': True}, 'is_accepted': {'read_only': True}}
+        fields = ['id', 'employee', 'start_date', 'end_date', 'details']
+        extra_kwargs = {'employee': {'read_only': True}}
 
     def validate(self, attrs):
         if attrs['end_date'] < attrs['start_date']:
@@ -155,6 +103,7 @@ class SummaryListSerializer(serializers.ModelSerializer):
                             add_task = False
                             task['time'] += report.time
                             task['overtime'] += report.overtime
+                            break
 
                     if add_task:
                         project['tasks'].append({'id': report.task.id, 'name': report.task.name, 'time': report.time, 'overtime': report.overtime})

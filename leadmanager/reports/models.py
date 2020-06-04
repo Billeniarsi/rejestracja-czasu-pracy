@@ -16,7 +16,6 @@ class Report(models.Model):
 
 class Overview(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True, null=True)
-    employee = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     start_date = models.DateField(blank=False)
     end_date = models.DateField(blank=False)
 
@@ -25,5 +24,4 @@ class Summary(models.Model):
     employee = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False)
     start_date = models.DateField(blank=False)
     end_date = models.DateField(blank=False)
-    is_accepted = models.BooleanField(blank=False, default=False)
 

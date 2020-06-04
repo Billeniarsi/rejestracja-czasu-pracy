@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions
-from .models import Report, Overview
-from .serializers import ReportListSerialzier, OverviewListSerializer
+from .models import Report, Overview, Summary
+from .serializers import ReportListSerialzier, OverviewListSerializer, SummaryListSerializer
 from .permissions import IsReportSender, IsReportSenderOrStaffMember, ReportNotAccepted
 
 
@@ -63,4 +63,12 @@ class OverviewListAPI(generics.ListCreateAPIView):
             serializer.save(employee=self.request.user)
         else:
             serializer.save()
+
+
+class SummaryListAPI(generics.ListCreateAPIView):
+    queryset = Summary.objects.all()
+    serializer_class = SummaryListSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(employee=self.request.user)
 

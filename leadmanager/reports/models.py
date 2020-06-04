@@ -20,3 +20,10 @@ class Overview(models.Model):
     start_date = models.DateField(blank=False)
     end_date = models.DateField(blank=False)
 
+
+class Summary(models.Model):
+    employee = models.ForeignKey(User, on_delete=models.CASCADE, blank=False, null=False)
+    start_date = models.DateField(blank=False)
+    end_date = models.DateField(blank=False)
+    is_accepted = models.BooleanField(blank=False, default=False)
+

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Report, Overview
+from .models import Report, Overview, Summary
 
 
 class ReportListSerialzier(serializers.ModelSerializer):
@@ -87,3 +87,53 @@ class OverviewListSerializer(serializers.ModelSerializer):
             overtime += report.overtime
 
         return overtime
+
+
+class SummaryListSerializer(serializers.ModelSerializer):
+    """
+    time = serializers.SerializerMethodField()
+    overtime = serializers.SerializerMethodField()
+    projects = serializers.SerializerMethodField()
+    tasks = serializers.SerializerMethodField()
+    """
+
+    details = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Summary
+        fields = ['id', 'employee', 'start_date', 'end_date', 'is_accepted', 'details']
+        extra_kwargs = {'employee': {'read_only': True}, 'is_accepted': {'read_only': True}}
+
+    def get_details(self, obj):
+        details = {'time': 0, 'overtime': 0, 'projects': []}
+        reports = Report.objects.filter(employee=obj.employee, date__range=[obj.start_date, obj.end_date])
+        for report in reports:
+            add_project = True
+            details['time'] += report.time
+            details['overtime'] += report.overtime
+
+            for project in details['projects']:
+                if project['id'] == report.task.project.id:
+                    add_project = False
+                    add_task = True
+                    project['time'] += report.time
+                    project['overtime'] += report.overtime
+
+                    for task in project['tasks']:
+                        if task['id'] == report.task.id:
+                            add_task = False
+                            task['time'] += report.time
+                            task['overtime'] += report.overtime
+
+                    if add_task:
+                        project['tasks'].append({'id': report.task.id, 'name': report.task.name, 'time': report.time, 'overtime': report.overtime})
+
+                    break
+
+            if add_project:
+                details['projects'].append({'id': report.task.project.id, 'name': report.task.project.name, 'time': report.time, 'overtime': report.overtime,
+                                            'tasks': [{'id': report.task.id, 'name': report.task.name, 'time': report.time, 'overtime': report.overtime}]})
+
+        return details
+
+

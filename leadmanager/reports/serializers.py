@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Report, Overview, Summary
 
@@ -81,17 +82,24 @@ class OverviewListSerializer(serializers.ModelSerializer):
 
 class SummaryListSerializer(serializers.ModelSerializer):
 
+    employee = serializers.SerializerMethodField()
     details = serializers.SerializerMethodField()
 
     class Meta:
         model = Summary
-        fields = ['employee', 'start_date', 'end_date', 'details']
+        fields = ['start_date', 'end_date', 'employee', 'details']
         extra_kwargs = {'employee': {'read_only': True}}
 
     def validate(self, attrs):
         if attrs['end_date'] < attrs['start_date']:
             raise serializers.ValidationError("Data końca podsumowania musi być późniejsza niż data jego rozpoczęcia.")
         return attrs
+
+    def create(self, validated_data):
+        return Summary.objects.create(employee=User.objects.get(id=self.context['employee_id']), **validated_data)
+
+    def get_employee(self, obj):
+        return {'id': obj.employee.id, 'username': obj.employee.username, 'first_name': obj.employee.first_name, 'last_name': obj.employee.last_name}
 
     def get_details(self, obj):
         details = {'time': 0, 'overtime': 0, 'projects': []}

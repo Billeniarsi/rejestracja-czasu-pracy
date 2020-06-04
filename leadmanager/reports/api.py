@@ -1,5 +1,4 @@
 from rest_framework import generics, permissions
-from django.contrib.auth.models import User
 
 from users.permissions import IsStaffMember
 from projects.models import Project
@@ -75,7 +74,11 @@ class SummaryListAPI(generics.ListCreateAPIView):
         pk = self.kwargs['user_id']
         return Summary.objects.filter(employee__id=pk)
 
+    def get_serializer_context(self):
+        return {'employee_id': self.kwargs['user_id']}
+
+"""
     def perform_create(self, serializer):
         serializer.save(employee=User.objects.get(id=self.kwargs['user_id']))
-
+"""
 

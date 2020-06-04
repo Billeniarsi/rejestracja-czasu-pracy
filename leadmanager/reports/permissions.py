@@ -4,13 +4,12 @@ from rest_framework import permissions
 class IsReportSender(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         user = request.user
-        return obj.employee == user
-
-
-class IsReportSenderOrStaffMember(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
-        user = request.user
-        return obj.employee == user or user.is_staff
+        if request.method in permissions.SAFE_METHODS and user.is_staff:
+            return True
+        elif obj.is_accepted is True and request.method not in permissions.SAFE_METHODS:
+            return False
+        else:
+            return request.user == obj.employee
 
 
 class ReportNotAccepted(permissions.BasePermission):

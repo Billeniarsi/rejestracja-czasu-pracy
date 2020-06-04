@@ -5,8 +5,8 @@ from users.permissions import IsStaffMember
 from projects.models import Project
 
 from .models import Report, Overview, Summary
-from .serializers import ReportListSerialzier, OverviewListSerializer, SummaryListSerializer
-from .permissions import IsReportSender, IsReportSenderOrStaffMember, ReportNotAccepted, IsSelfOrStaffMember
+from .serializers import ReportListSerialzier, ReportAcceptSerializer, OverviewListSerializer, SummaryListSerializer
+from .permissions import IsReportSender, ReportNotAccepted, IsSelfOrStaffMember
 
 
 class ReportListAPI(generics.ListCreateAPIView):
@@ -40,7 +40,17 @@ class ReportDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = Report.objects.all()
     serializer_class = ReportListSerialzier
 
-    permission_classes = [IsReportSender, ReportNotAccepted]
+    permission_classes = [IsReportSender]
+
+
+class ReportAcceptAPI(generics.UpdateAPIView):
+    queryset = Report.objects.all()
+    serializer_class = ReportAcceptSerializer
+
+    permission_classes = [IsStaffMember, ReportNotAccepted]
+
+    def perform_update(self, serializer):
+        serializer.save(is_accepted=True)
 
 
 class OverviewListAPI(generics.ListCreateAPIView):

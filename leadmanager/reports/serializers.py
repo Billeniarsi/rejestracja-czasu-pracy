@@ -33,6 +33,12 @@ class ReportListSerialzier(serializers.ModelSerializer):
         return attrs
 
 
+class ReportAcceptSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Report
+        fields = ['is_accepted']
+
+
 class OverviewListSerializer(serializers.ModelSerializer):
 
     project_name = serializers.SerializerMethodField()
@@ -40,7 +46,7 @@ class OverviewListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Overview
-        fields = ['id', 'project', 'project_name', 'start_date', 'end_date', 'details']
+        fields = ['project', 'project_name', 'start_date', 'end_date', 'details']
         extra_kwargs = {'project': {'read_only': True}}
 
     def validate(self, attrs):
@@ -79,7 +85,7 @@ class SummaryListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Summary
-        fields = ['id', 'employee', 'start_date', 'end_date', 'details']
+        fields = ['employee', 'start_date', 'end_date', 'details']
         extra_kwargs = {'employee': {'read_only': True}}
 
     def validate(self, attrs):

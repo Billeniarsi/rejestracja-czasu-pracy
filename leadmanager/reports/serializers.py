@@ -13,6 +13,25 @@ class ReportListSerialzier(serializers.ModelSerializer):
     def get_project(self, obj):
         return obj.task.project.id
 
+    def validate_time(self, data):
+        if data < 0:
+            raise serializers.ValidationError("Przepracowana liczba minut musi być nieujemna.")
+        if data%5 != 0:
+            raise serializers.ValidationError("Czas pracy musi być wielokrotnością liczby 5. (5 minut to podstawowa jednostka liczenia czasu pracy)")
+        return data
+
+    def validate_overtime(self, data):
+        if data < 0:
+            raise serializers.ValidationError("Przepracowana liczba minut musi być nieujemna.")
+        if data%5 != 0:
+            raise serializers.ValidationError("Czas pracy musi być wielokrotnością liczby 5. (5 minut to podstawowa jednostka liczenia czasu pracy)")
+        return data
+
+    def validate(self, attrs):
+        if attrs['time'] == 0 and attrs['overtime'] == 0:
+            raise serializers.ValidationError("Musisz podać standardowy czas pracy bądź nadgodziny.")
+        return attrs
+
 
 class OverviewListSerializer(serializers.ModelSerializer):
     project_name = serializers.SerializerMethodField()

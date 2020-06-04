@@ -31,14 +31,7 @@ class ReportListAPI(generics.ListCreateAPIView):
         return queryset
 
 
-class ReportDetailsAPI(generics.RetrieveAPIView):
-    queryset = Report.objects.all()
-    serializer_class = ReportListSerialzier
-
-    permission_classes = [IsReportSenderOrStaffMember]
-
-
-class ReportUpdateAPI(generics.RetrieveUpdateDestroyAPIView):
+class ReportDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = Report.objects.all()
     serializer_class = ReportListSerialzier
 
@@ -68,6 +61,16 @@ class OverviewListAPI(generics.ListCreateAPIView):
 class SummaryListAPI(generics.ListCreateAPIView):
     queryset = Summary.objects.all()
     serializer_class = SummaryListSerializer
+
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        if self.request.user.is_staff:
+            queryset = Summary.objects.all()
+        else:
+            queryset = Summary.objects.filter(employee=self.request.user)
+
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save(employee=self.request.user)

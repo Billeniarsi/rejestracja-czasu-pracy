@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import ReportForm from "./ReportForm";
+import Overview from "./Overview";
 
 export default function Dashboard() {
     return (
@@ -40,79 +40,7 @@ export default function Dashboard() {
                                     </div>
                                 </div>
                             </div>
-                            <ReportForm />
-
-
-                            <div className="card mb-4">
-                                <div className="card-header"><i className="fas fa-table mr-1"></i>Raport od dnia: 28.05.2020, do dnia: 28.05.2020</div>
-                                <div className="card-body">
-                                    <div className="table-responsive">
-                                        <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Projekt</th>
-                                                    <th>Ilość godzin</th>
-                                                    <th>Ilość nadgodzin</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>Wszystkie</td>
-                                                    <td>8:00</td>
-                                                    <td>0:15</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Borrow.me</td>
-                                                    <td>4:30</td>
-                                                    <td>0:15</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Osiedlowy monitoring</td>
-                                                    <td>3:30</td>
-                                                    <td>0:00</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                        <p>Wybierz projekt    <select><option>Wszystkie</option></select></p>
-                                        <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th>Projekt</th>
-                                                    <th>Zadanie</th>
-                                                    <th>Ilość godzin</th>
-                                                    <th>Ilość nadgodzin</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>Borrow.me</td>
-                                                    <td>Strona główna</td>
-                                                    <td>2:15</td>
-                                                    <td>0:00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Borrow.me</td>
-                                                    <td>Strona logowania</td>
-                                                    <td>1:15</td>
-                                                    <td>0:15</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Osiedlowy monitoring</td>
-                                                    <td>Mocup strony głównej</td>
-                                                    <td>2:15</td>
-                                                    <td>0:00</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Osiedlowy monitoring</td>
-                                                    <td>Mocup strony logowania</td>
-                                                    <td>2:15</td>
-                                                    <td>0:00</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
+                            <Overview />
                         </div>
                     </main>
                     <footer className="py-4 bg-light mt-auto">

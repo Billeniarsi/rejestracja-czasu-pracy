@@ -1,7 +1,11 @@
 from rest_framework import generics, permissions
-from .models import Report, Overview
-from .serializers import ReportListSerialzier, OverviewListSerializer
-from .permissions import IsReportSender, IsReportSenderOrStaffMember, ReportNotAccepted
+
+from users.permissions import IsStaffMember
+from projects.models import Project
+
+from .models import Report, Overview, Summary
+from .serializers import ReportListSerialzier, ReportAcceptSerializer, OverviewListSerializer, SummaryListSerializer
+from .permissions import IsReportSender, ReportNotAccepted, IsSelfOrStaffMember
 
 
 class ReportListAPI(generics.ListCreateAPIView):
@@ -31,36 +35,50 @@ class ReportListAPI(generics.ListCreateAPIView):
         return queryset
 
 
-class ReportDetailsAPI(generics.RetrieveAPIView):
+class ReportDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = Report.objects.all()
     serializer_class = ReportListSerialzier
 
-    permission_classes = [IsReportSenderOrStaffMember]
+    permission_classes = [IsReportSender]
 
 
-class ReportUpdateAPI(generics.RetrieveUpdateDestroyAPIView):
+class ReportAcceptAPI(generics.UpdateAPIView):
     queryset = Report.objects.all()
-    serializer_class = ReportListSerialzier
+    serializer_class = ReportAcceptSerializer
 
-    permission_classes = [IsReportSender, ReportNotAccepted]
+    permission_classes = [IsStaffMember, ReportNotAccepted]
+
+    def perform_update(self, serializer):
+        serializer.save(is_accepted=True)
 
 
 class OverviewListAPI(generics.ListCreateAPIView):
     serializer_class = OverviewListSerializer
 
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsStaffMember]
 
     def get_queryset(self):
-        if self.request.user.is_staff:
-            queryset = Overview.objects.all()
-        else:
-            queryset = Overview.objects.filter(employee=self.request.user)
-
-        return queryset
+        pk = self.kwargs['project_id']
+        return Overview.objects.filter(project__id=pk)
 
     def perform_create(self, serializer):
-        if not self.request.user.is_staff:
-            serializer.save(employee=self.request.user)
-        else:
-            serializer.save()
+        serializer.save(project=Project.objects.get(id=self.kwargs['project_id']))
+
+
+class SummaryListAPI(generics.ListCreateAPIView):
+    serializer_class = SummaryListSerializer
+
+    permission_classes = [IsSelfOrStaffMember]
+
+    def get_queryset(self):
+        pk = self.kwargs['user_id']
+        return Summary.objects.filter(employee__id=pk)
+
+    def get_serializer_context(self):
+        return {'employee_id': self.kwargs['user_id']}
+
+"""
+    def perform_create(self, serializer):
+        serializer.save(employee=User.objects.get(id=self.kwargs['user_id']))
+"""
 

@@ -4,7 +4,7 @@ import errors from './errors';
 import messages from './messages';
 import auth from './auth';
 import reports from './reports';
-import overview from './overview';
+import summary from './summary';
 
 export default combineReducers({
     leads,
@@ -12,5 +12,5 @@ export default combineReducers({
     messages,
     auth,
     reports,
-    overview
+    summary
 });

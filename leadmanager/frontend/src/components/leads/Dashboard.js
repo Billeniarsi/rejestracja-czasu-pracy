@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import Overview from "./Overview";
+import Summary from "./Summary";
 
 export default function Dashboard() {
     return (
@@ -40,7 +40,7 @@ export default function Dashboard() {
                                     </div>
                                 </div>
                             </div>
-                            <Overview />
+                            <Summary />
                         </div>
                     </main>
                     <footer className="py-4 bg-light mt-auto">

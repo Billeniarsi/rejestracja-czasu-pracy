@@ -1,18 +1,15 @@
-import { GET_OVERVIEW } from '../actions/types';
+import { GET_SUMMARY } from '../actions/types';
 
 const initialState = {
-    startDate: "",
-    endDate: "",
-    status: false,
-    overview: {}
+    summary: {}
 }
 
 export default function (state = initialState, action) {
     switch (action.type) {
-        case GET_OVERVIEW:
+        case GET_SUMMARY:
             return {
                 ...state,
-                overview: action.payload
+                summary: action.payload
             };
         default:
             return state;

@@ -1,16 +1,17 @@
 import React, { Component } from 'react'
 import PropTypes, { string } from 'prop-types';
-import { getOverview } from '../../actions/overview';
+import { getSummary } from '../../actions/summary';
 import { connect } from 'react-redux';
 
-export class Overview extends Component {
+export class Summary extends Component {
     state = {
         startDate: '',
         endDate: '',
+        value: 'Wszystkie'
     }
 
     static propTypes = {
-        getOverview: PropTypes.func.isRequired
+        getSummary: PropTypes.func.isRequired
     }
 
     displayTime(time) {
@@ -24,25 +25,71 @@ export class Overview extends Component {
         return `${h}:${min}`;
     }
 
+
+
+    projects() {
+        const { summary } = this.props;
+        return summary.details.projects.map(project => (
+            <tr key={project.id}>
+                <td>{project.name}</td>
+                <td>{this.displayTime(project.time)}</td>
+                <td>{this.displayTime(project.overtime)}</td>
+            </tr>
+        ));
+    }
+
+    selectProject() {
+        const { summary } = this.props;
+        return (
+            <div className="m-md-3">
+                Wybierz projekt
+                <select className="ml-2" value={this.state.value} onChange={this.handleChange}>
+                    <option value="Wszystkie">Wszystkie</option>
+                    {summary.details.projects.map(project => (
+                        <option key={project.id} value={project.name}>{project.name}</option>
+                    ))}
+                </select>
+            </div>
+        )
+    }
+
+    displayTasks() {
+        const { summary } = this.props;
+        return summary.details.projects.map(project => {
+            if (project.name === this.state.value || this.state.value === "Wszystkie") {
+                return project.tasks.map(task => (
+                    <tr key={task.id}>
+                        <td>{project.name}</td>
+                        <td>{task.name}</td>
+                        <td>{this.displayTime(task.time)}</td>
+                        <td>{this.displayTime(task.overtime)}</td>
+                    </tr>
+                ))
+            }
+        });
+    }
+
     onChange = e => this.setState({ [e.target.name]: e.target.value });
+    handleChange = e => this.setState({ value: e.target.value });
     onSubmit = e => {
         e.preventDefault();
+        const userID = this.props.auth.user.id;
         const { startDate, endDate } = this.state;
-        const date = { startDate, endDate };
-        this.props.getOverview(date);
+        const body = { startDate, endDate, userID };
+        this.props.getSummary(body);
         this.setState({
             startDate: '',
             endDate: '',
         });
     };
     render() {
-        const { overview } = this.props;
+        const { summary } = this.props;
         return (
             <div>
                 <form onSubmit={this.onSubmit}>
                     <div className="row align-content-center">
-                        <div className="col-xl-2 mb-3 mr-4">
-                            Data początku raportu
+                        <div className="col-xl-3 mb-3 mr-4">
+                            Data początku podsumowania
                             <input
                                 placeholder="RRRR-MM-DD"
                                 className="form-control"
@@ -52,8 +99,8 @@ export class Overview extends Component {
                                 value={this.state.startDate}
                             />
                         </div>
-                        <div className="col-xl-2">
-                            Data końca raportu
+                        <div className="col-xl-3">
+                            Data końca podsumowania
                             <input
                                 placeholder="RRRR-MM-DD"
                                 className="form-control"
@@ -71,9 +118,9 @@ export class Overview extends Component {
                         Pokaż podsumowanie
                     </button>
                 </form>
-                {overview.start_date &&
+                {summary.start_date &&
                     <div className="card mb-4">
-                        <div className="card-header">Podsumowanie od dnia: {overview.start_date}, do dnia: {overview.end_date} <br /> Podsumowanie dla: <strong>{overview.employee_username}</strong></div>
+                        <div className="card-header">Podsumowanie od dnia: {summary.start_date}, do dnia: {summary.end_date} <br /> Podsumowanie dla: <strong>{summary.employee.first_name} {summary.employee.last_name}</strong></div>
                         <div className="card-body">
                             <div className="table-responsive">
                                 <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
@@ -86,23 +133,14 @@ export class Overview extends Component {
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>Wszystkie</td>
-                                            <td>{this.displayTime(overview.time)}</td>
-                                            <td>{this.displayTime(overview.overtime)}</td>
+                                            <td>Wszystkie projekty</td>
+                                            <td>{this.displayTime(summary.details.time)}</td>
+                                            <td>{this.displayTime(summary.details.overtime)}</td>
                                         </tr>
-                                        <tr>
-                                            <td>Borrow.me</td>
-                                            <td>4:30</td>
-                                            <td>0:15</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Osiedlowy monitoring</td>
-                                            <td>3:30</td>
-                                            <td>0:00</td>
-                                        </tr>
+                                        {this.projects()}
                                     </tbody>
                                 </table>
-                                <p>Wybierz projekt    <select><option>Wszystkie</option></select></p>
+                                {this.selectProject()}
                                 <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
                                     <thead>
                                         <tr>
@@ -113,30 +151,7 @@ export class Overview extends Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Borrow.me</td>
-                                            <td>Strona główna</td>
-                                            <td>2:15</td>
-                                            <td>0:00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Borrow.me</td>
-                                            <td>Strona logowania</td>
-                                            <td>1:15</td>
-                                            <td>0:15</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Osiedlowy monitoring</td>
-                                            <td>Mocup strony głównej</td>
-                                            <td>2:15</td>
-                                            <td>0:00</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Osiedlowy monitoring</td>
-                                            <td>Mocup strony logowania</td>
-                                            <td>2:15</td>
-                                            <td>0:00</td>
-                                        </tr>
+                                        {this.displayTasks()}
                                     </tbody>
                                 </table>
                             </div>
@@ -148,7 +163,8 @@ export class Overview extends Component {
 }
 
 const mapStateToProps = state => ({
-    overview: state.overview.overview
+    summary: state.summary.summary,
+    auth: state.auth
 });
 
-export default connect(mapStateToProps, { getOverview })(Overview);
+export default connect(mapStateToProps, { getSummary })(Summary);

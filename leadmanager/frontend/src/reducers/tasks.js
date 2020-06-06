@@ -9,7 +9,7 @@ export default function (state = initialState, action) {
         case GET_TASKS:
             return {
                 ...state,
-                tasks: state.tasks.concat(action.payload)
+                tasks: action.payload
             };
         default:
             return state;

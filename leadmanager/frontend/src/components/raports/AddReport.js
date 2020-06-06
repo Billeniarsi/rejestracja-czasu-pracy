@@ -36,7 +36,6 @@ export class AddReport extends Component {
 
         this.setState({ todaysDate: `${year}-${month}-${day}` });
         this.props.getProjects();
-        this.props.getTasks();
     }
 
     displayTime(time) {
@@ -69,10 +68,9 @@ export class AddReport extends Component {
                         <p className="m-0">Wybierz zadanie</p>
                         <select className="ml-2 w-50" value={this.state.value} onChange={this.selectTaskChange}>
                             <option key="0" value="0">Wybierz zadanie</option>
-                            {tasks.map(task => {
-                                if (task.project == this.state.selectedProject)
-                                    return <option key={task.id} value={task.id}>{task.name}</option>
-                            })}
+                            {tasks.map(task => (
+                                <option key={task.id} value={task.id}>{task.name}</option>
+                            ))}
                         </select>
                     </div>
                 </div>
@@ -88,7 +86,10 @@ export class AddReport extends Component {
             this.setState({ [e.target.name]: time })
     }
     onChange = e => this.setState({ [e.target.name]: e.target.value });
-    selectProjectChange = e => this.setState({ selectedProject: e.target.value });
+    selectProjectChange = e => {
+        this.setState({ selectedProject: e.target.value })
+        this.props.getTasks(e.target.value);
+    };
     selectTaskChange = e => this.setState({ selectedTask: e.target.value });
 
     time2min(h, min) {

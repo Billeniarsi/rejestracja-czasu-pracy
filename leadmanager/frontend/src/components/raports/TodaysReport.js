@@ -58,7 +58,7 @@ export class TodaysReport extends Component {
                         <td><button className="btn btn-success">Edytuj</button></td>
                     }
                     {report.is_accepted ?
-                        <td><button title="Nie można usunąć zaakceptowanego raportu" className="btn btn-danger disabled" onClick={() => this.deleteReport(report.id)}>Usuń</button></td> :
+                        <td><button title="Nie można usunąć zaakceptowanego raportu" className="btn btn-danger disabled">Usuń</button></td> :
                         <td><button className="btn btn-danger" onClick={() => this.deleteReport(report.id)}>Usuń</button></td>
                     }
                 </tr>

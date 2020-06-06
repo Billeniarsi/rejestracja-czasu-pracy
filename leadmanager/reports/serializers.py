@@ -5,14 +5,18 @@ from .models import Report, Overview, Summary
 
 class ReportListSerialzier(serializers.ModelSerializer):
     project = serializers.SerializerMethodField()
+    task_name = serializers.SerializerMethodField()
 
     class Meta:
         model = Report
-        fields = ['id', 'employee', 'project', 'task', 'date', 'time', 'overtime', 'is_accepted']
+        fields = ['id', 'employee', 'project', 'task', 'task_name', 'date', 'time', 'overtime', 'is_accepted']
         extra_kwargs = {'employee': {'read_only': True}, 'is_accepted': {'read_only': True}}
 
     def get_project(self, obj):
-        return obj.task.project.id
+        return {'id': obj.task.project.id, 'name': obj.task.project.name}
+
+    def get_task_name(self, obj):
+        return obj.task.name
 
     def validate_time(self, data):
         if data < 0:

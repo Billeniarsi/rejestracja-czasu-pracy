@@ -5,6 +5,8 @@ import messages from './messages';
 import auth from './auth';
 import reports from './reports';
 import summary from './summary';
+import projects from './projects';
+import tasks from './tasks';
 
 export default combineReducers({
     leads,
@@ -12,5 +14,7 @@ export default combineReducers({
     messages,
     auth,
     reports,
-    summary
+    summary,
+    projects,
+    tasks
 });

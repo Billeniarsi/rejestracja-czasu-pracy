@@ -1,4 +1,4 @@
-import { GET_REPORTS, DELETE_REPORT } from '../actions/types';
+import { GET_REPORTS, DELETE_REPORT, ADD_REPORT } from '../actions/types';
 
 const initialState = {
     reports: {}
@@ -11,6 +11,11 @@ export default function (state = initialState, action) {
                 ...state,
                 reports: action.payload
             };
+        case ADD_REPORT:
+            return {
+                ...state,
+                reports: [...state.reports, action.payload]
+            }
         case DELETE_REPORT:
             return {
                 ...state,

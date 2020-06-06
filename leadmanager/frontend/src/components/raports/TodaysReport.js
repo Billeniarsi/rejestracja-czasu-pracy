@@ -8,6 +8,11 @@ export class TodaysReport extends Component {
         todaysDate: ""
     }
 
+    static propTypes = {
+        getReports: PropTypes.func.isRequired,
+        deleteReport: PropTypes.func.isRequired
+    }
+
     componentDidMount() {
         const date = new Date();
         const year = date.getFullYear();
@@ -21,11 +26,6 @@ export class TodaysReport extends Component {
 
         this.setState({ todaysDate: `${year}-${month}-${day}` });
         this.props.getReports(`${year}-${month}-${day}`);
-    }
-
-    static propTypes = {
-        getReports: PropTypes.func.isRequired,
-        deleteReport: PropTypes.func.isRequired
     }
 
     displayTime(time) {
@@ -63,19 +63,6 @@ export class TodaysReport extends Component {
         }
     }
 
-    onChange = e => this.setState({ [e.target.name]: e.target.value });
-    handleChange = e => this.setState({ value: e.target.value });
-    onSubmit = e => {
-        e.preventDefault();
-        const userID = this.props.auth.user.id;
-        const { startDate, endDate } = this.state;
-        const body = { startDate, endDate, userID };
-        this.props.getSummary(body);
-        this.setState({
-            startDate: '',
-            endDate: '',
-        });
-    };
     render() {
         const { reports } = this.props;
         return (

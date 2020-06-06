@@ -23,7 +23,9 @@ export class Alerts extends Component {
         if (message !== prevProps.message) {
             if (message.deleteLead) alert.success(message.deleteLead);
             if (message.addLead) alert.success(message.addLead);
+            if (message.addReport) alert.success(message.addReport);
             if (message.passwordNotMatch) alert.error(message.passwordNotMatch);
+            if (message.incorrectTime) alert.error(message.incorrectTime);
             if (message.deleteRaport) alert.success(message.deleteRaport);
         }
     }

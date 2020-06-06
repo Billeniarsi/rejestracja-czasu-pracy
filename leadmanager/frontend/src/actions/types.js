@@ -13,4 +13,6 @@ export const REGISTER_FAIL = "REGISTER_FAIL";
 export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 
 export const GET_REPORTS = "GET_REPORTS";
+export const DELETE_REPORT = "DELETE_REPORT";
+
 export const GET_SUMMARY = "GET_SUMMARY";

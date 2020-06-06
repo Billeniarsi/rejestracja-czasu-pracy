@@ -13,6 +13,7 @@ import Alerts from './layout/Alerts';
 import Header from './layout/Header';
 
 import Dashboard from './leads/Dashboard';
+import Raports from './raports/Reports';
 import Login from './accounts/Login';
 import Register from './accounts/Register';
 import { loadUser } from '../actions/auth';
@@ -38,9 +39,13 @@ class App extends Component {
                             <Alerts />
                             <div className="container">
                                 <Switch>
-                                    <PrivateRoute exact path="/" component={Dashboard}></PrivateRoute>
+                                    <Route exact path="/">
+                                        <Redirect to="/summaries" />
+                                    </Route>
+                                    <PrivateRoute exact path="/summaries" component={Dashboard}></PrivateRoute>
                                     <Route exact path="/register" component={Register}></Route>
                                     <Route exact path="/login" component={Login}></Route>
+                                    <Route exact path="/raports" component={Raports}></Route>
                                 </Switch>
                             </div>
                         </Fragment>

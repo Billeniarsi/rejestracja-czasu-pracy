@@ -11207,3 +11207,7 @@ body {
 .sb-sidenav-light .sb-sidenav-footer {
     background-color: #e9ecef;
 }
+
+.pointer {
+    cursor: pointer;
+}

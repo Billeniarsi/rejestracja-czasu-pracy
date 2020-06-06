@@ -1,5 +1,6 @@
 import React, { Fragment } from 'react'
 import Summary from "./Summary";
+import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
     return (
@@ -16,7 +17,7 @@ export default function Dashboard() {
                                 <div className="col-xl-4 col-md-6">
                                     <div className="card bg-primary text-white mb-4">
                                         <div className="card-footer d-flex align-items-center justify-content-between">
-                                            <a className="small text-white stretched-link" href="#">Podsumowanie okresu</a>
+                                            <Link className="small text-white stretched-link" to="/summaries">Podsumowanie okresu</Link>
                                             <div className="small text-white"><i className="fas fa-angle-right"></i></div>
                                         </div>
                                     </div>
@@ -25,7 +26,7 @@ export default function Dashboard() {
                                 <div className="col-xl-4 col-md-6">
                                     <div className="card bg-primary text-white mb-4">
                                         <div className="card-footer d-flex align-items-center justify-content-between">
-                                            <a className="small text-white stretched-link" href="#">Dodaj zadanie</a>
+                                            <Link to="/raports" className="small text-white stretched-link">Raporty</Link>
                                             <div className="small text-white"><i className="fas fa-angle-right"></i></div>
                                         </div>
                                     </div>
@@ -34,7 +35,7 @@ export default function Dashboard() {
                                 <div className="col-xl-4 col-md-6">
                                     <div className="card bg-primary text-white mb-4">
                                         <div className="card-footer d-flex align-items-center justify-content-between">
-                                            <a className="small text-white stretched-link" href="#">Dzisiejszy raport</a>
+                                            <Link to="/raports" className="small text-white stretched-link">Dzisiejszy raport</Link>
                                             <div className="small text-white"><i className="fas fa-angle-right"></i></div>
                                         </div>
                                     </div>

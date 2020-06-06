@@ -5,9 +5,10 @@ import { tokenConfig } from './auth';
 import { GET_REPORTS } from "./types";
 
 // GET REPORTS
-export const getReports = () => (dispatch, getState) => {
+export const getReports = (date) => (dispatch, getState) => {
+    console.log(`/api/reports/?date=${date}`)
     axios
-        .get("/api/reports/", tokenConfig(getState))
+        .get(`/api/reports/?date=${date}`, tokenConfig(getState))
         .then((res) => {
             console.log(res.data)
             dispatch({

@@ -1,13 +1,18 @@
 import React, { Component } from 'react'
 import PropTypes, { string } from 'prop-types';
 import { connect } from 'react-redux';
+import { getReports, deleteReport } from '../../actions/reports';
 
 export class TodaysReport extends Component {
     state = {
-        date: '',
+        date: "",
+        employeeID: "",
+        project: "",
     }
 
     static propTypes = {
+        getReports: PropTypes.func.isRequired,
+        deleteReport: PropTypes.func.isRequired
     }
 
     displayTime(time) {
@@ -21,83 +26,46 @@ export class TodaysReport extends Component {
         return `${h}:${min}`;
     }
 
-    projects() {
-        const { summary } = this.props;
-        return summary.details.projects.map(project => (
-            <tr key={project.id}>
-                <td>{project.name}</td>
-                <td>{this.displayTime(project.time)}</td>
-                <td>{this.displayTime(project.overtime)}</td>
-            </tr>
-        ));
-    }
-
-    selectProject() {
-        const { summary } = this.props;
-        return (
-            <div className="m-md-3">
-                Wybierz projekt
-                <select className="ml-2" value={this.state.value} onChange={this.handleChange}>
-                    <option value="Wszystkie">Wszystkie</option>
-                    {summary.details.projects.map(project => (
-                        <option key={project.id} value={project.name}>{project.name}</option>
-                    ))}
-                </select>
-            </div>
-        )
+    deleteReport(id) {
+        this.props.deleteReport(id);
     }
 
     displayTasks() {
-        const { summary } = this.props;
-        return summary.details.projects.map(project => {
-            if (project.name === this.state.value || this.state.value === "Wszystkie") {
-                return project.tasks.map(task => (
-                    <tr key={task.id}>
-                        <td>{project.name}</td>
-                        <td>{task.name}</td>
-                        <td>{this.displayTime(task.time)}</td>
-                        <td>{this.displayTime(task.overtime)}</td>
-                    </tr>
-                ))
-            }
-        });
+        const { reports } = this.props;
+        if (reports[0]) {
+            return reports.map(report => (
+                <tr key={report.id}>
+                    <td>{report.project.name}</td>
+                    <td>{report.task_name}</td>
+                    <td>{this.displayTime(report.time)}</td>
+                    <td>{this.displayTime(report.overtime)}</td>
+                    {report.is_accepted ? <td>Zaakceptowany</td> : <td>Niezaakceptowany</td>}
+                    {report.is_accepted ?
+                        <td><button title="Nie można edytować zaakceptowanego raportu" className="btn btn-success disabled">Edytuj</button></td> :
+                        <td><button className="btn btn-success">Edytuj</button></td>
+                    }
+                    {report.is_accepted ?
+                        <td><button title="Nie można usunąć zaakceptowanego raportu" className="btn btn-danger disabled">Usuń</button></td> :
+                        <td><button className="btn btn-danger" onClick={() => this.deleteReport(report.id)}>Usuń</button></td>
+                    }
+                </tr>
+            ));
+        }
     }
 
     onChange = e => this.setState({ [e.target.name]: e.target.value });
-    handleChange = e => this.setState({ value: e.target.value });
-    onSubmit = e => {
-        e.preventDefault();
-        const userID = this.props.auth.user.id;
-        const { startDate, endDate } = this.state;
-        const body = { startDate, endDate, userID };
-        this.props.getSummary(body);
-        this.setState({
-            startDate: '',
-            endDate: '',
-        });
-    };
+
     render() {
-        const { summary } = this.props;
+        const { reports } = this.props;
         return (
             <div>
+                <div className="text-center m-md-5">
+                    Wybierz dzień z którego mają wyświetlić się raporty <input type="date" style={{ width: "15%" }} name="date" value={this.state.date} onChange={this.onChange} /> godzin i <input type="number" style={{ width: "5%" }} name="minWorking" value={this.state.minWorking} onChange={this.onTimeChange} /> minut
+                </div>
                 <div className="card mb-4">
-                    <div className="card-header">Dzisiejsze raporty (05.06.2020)</div>
+                    <div className="card-header">Raporty z dnia {this.state.date}</div>
                     <div className="card-body">
-                        <div className="table-responsive">
-                            <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
-                                <thead>
-                                    <tr>
-                                        <th>Projekt</th>
-                                        <th>Ilość godzin</th>
-                                        <th>Ilość nadgodzin</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Cały dzień</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        {reports[0] ? <div className="table-responsive">
                             <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
                                 <thead>
                                     <tr>
@@ -105,12 +73,16 @@ export class TodaysReport extends Component {
                                         <th>Zadanie</th>
                                         <th>Ilość godzin</th>
                                         <th>Ilość nadgodzin</th>
+                                        <th>Status</th>
+                                        <th>Edycja</th>
+                                        <th>Usunięcie</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    {this.displayTasks()}
                                 </tbody>
                             </table>
-                        </div>
+                        </div> : <div>Nie ma z tego dnia żadnych raportów</div>}
                     </div>
                 </div>
             </div>
@@ -119,6 +91,7 @@ export class TodaysReport extends Component {
 }
 
 const mapStateToProps = state => ({
+    reports: state.reports.reports
 });
 
-export default connect(mapStateToProps)(TodaysReport);
+export default connect(mapStateToProps, { getReports, deleteReport })(TodaysReport);

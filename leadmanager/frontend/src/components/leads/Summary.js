@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 export class Summary extends Component {
     state = {
+        todaysDate: '',
         startDate: '',
         endDate: '',
         value: 'Wszystkie'
@@ -12,6 +13,22 @@ export class Summary extends Component {
 
     static propTypes = {
         getSummary: PropTypes.func.isRequired
+    }
+
+
+
+    componentDidMount() {
+        const date = new Date();
+        const year = date.getFullYear();
+        let month = date.getMonth() + 1;
+        let day = date.getDate();
+
+        if (month < 10)
+            month = `0${month}`;
+        if (day < 10)
+            day = `0${day}`;
+
+        this.setState({ todaysDate: `${year}-${month}-${day}` });
     }
 
     displayTime(time) {
@@ -93,10 +110,11 @@ export class Summary extends Component {
                             <input
                                 placeholder="RRRR-MM-DD"
                                 className="form-control"
-                                type="text"
+                                type="date"
                                 name="startDate"
                                 onChange={this.onChange}
                                 value={this.state.startDate}
+                                max={this.state.todaysDate}
                             />
                         </div>
                         <div className="col-xl-3">
@@ -104,10 +122,11 @@ export class Summary extends Component {
                             <input
                                 placeholder="RRRR-MM-DD"
                                 className="form-control"
-                                type="text"
+                                type="date"
                                 name="endDate"
                                 onChange={this.onChange}
                                 value={this.state.endDate}
+                                max={this.state.todaysDate}
                             />
                         </div>
                     </div>

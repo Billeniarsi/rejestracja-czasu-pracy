@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes, { string } from 'prop-types';
 import { getSummary } from '../../actions/summary';
+import { getUsers } from '../../actions/users';
 import { connect } from 'react-redux';
 
 export class Summary extends Component {
@@ -8,11 +9,13 @@ export class Summary extends Component {
         todaysDate: '',
         startDate: '',
         endDate: '',
-        value: 'Wszystkie'
+        value: 'Wszystkie',
+        employeeID: 0
     }
 
     static propTypes = {
-        getSummary: PropTypes.func.isRequired
+        getSummary: PropTypes.func.isRequired,
+        getUsers: PropTypes.func.isRequired,
     }
 
     componentDidMount() {
@@ -26,7 +29,8 @@ export class Summary extends Component {
         if (day < 10)
             day = `0${day}`;
 
-        this.setState({ todaysDate: `${year}-${month}-${day}` });
+        this.setState({ todaysDate: `${year}-${month}-${day}`, employeeID: this.props.auth.user.id });
+        this.props.getUsers();
     }
 
     displayTime(time) {
@@ -40,7 +44,21 @@ export class Summary extends Component {
         return `${h}:${min}`;
     }
 
-
+    employeersSelect() {
+        const { users, auth } = this.props;
+        if (users.users[0])
+            return (
+                <div className="m-md-3">
+                    Wybierz pracownika
+                    <select className="ml-2" name="employeeID" value={this.state.employeeID} onChange={this.onChange}>
+                        <option value={auth.user.id}>Ja ({auth.user.first_name} {auth.user.last_name})</option>
+                        {users.users.map(user => (
+                            <option key={user.id} value={user.id}>{user.first_name} {user.last_name}</option>
+                        ))}
+                    </select>
+                </div>
+            )
+    }
 
     projects() {
         const { summary } = this.props;
@@ -88,7 +106,7 @@ export class Summary extends Component {
     handleChange = e => this.setState({ value: e.target.value });
     onSubmit = e => {
         e.preventDefault();
-        const userID = this.props.auth.user.id;
+        const userID = this.state.employeeID;
         const { startDate, endDate } = this.state;
         const body = { startDate, endDate, userID };
         this.props.getSummary(body);
@@ -98,7 +116,7 @@ export class Summary extends Component {
         });
     };
     render() {
-        const { summary } = this.props;
+        const { summary, auth } = this.props;
         return (
             <div>
                 <form onSubmit={this.onSubmit}>
@@ -128,6 +146,7 @@ export class Summary extends Component {
                             />
                         </div>
                     </div>
+                    {auth.user.is_staff ? this.employeersSelect() : ""}
                     <button
                         type="submit"
                         className="btn btn-success mb-3"
@@ -181,7 +200,8 @@ export class Summary extends Component {
 
 const mapStateToProps = state => ({
     summary: state.summary.summary,
-    auth: state.auth
+    auth: state.auth,
+    users: state.users,
 });
 
-export default connect(mapStateToProps, { getSummary })(Summary);
+export default connect(mapStateToProps, { getSummary, getUsers })(Summary);

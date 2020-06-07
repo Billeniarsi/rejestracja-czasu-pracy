@@ -1,18 +1,15 @@
 import axios from "axios";
 import { createMessage, returnErrors } from './messages';
 import { tokenConfig } from './auth';
-import { GET_SUMMARY } from "./types";
+import { GET_USERS } from "./types";
 
-export const getSummary = (body) => (dispatch, getState) => {
-    axios.post(`/api/users/${body.userID}/summaries/`, {
-        "start_date": body.startDate,
-        "end_date": body.endDate
-    },
+export const getUsers = () => (dispatch, getState) => {
+    axios.get(`/api/users/`,
         tokenConfig(getState),
         { withCredentials: true })
         .then(res => {
             dispatch({
-                type: GET_SUMMARY,
+                type: GET_USERS,
                 payload: res.data,
             });
         })

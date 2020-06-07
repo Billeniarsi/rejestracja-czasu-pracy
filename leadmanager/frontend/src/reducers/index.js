@@ -7,6 +7,7 @@ import reports from './reports';
 import summary from './summary';
 import projects from './projects';
 import tasks from './tasks';
+import users from './users';
 
 export default combineReducers({
     leads,
@@ -16,5 +17,6 @@ export default combineReducers({
     reports,
     summary,
     projects,
-    tasks
+    tasks,
+    users
 });

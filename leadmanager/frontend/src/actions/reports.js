@@ -2,7 +2,7 @@ import axios from "axios";
 import { createMessage, returnErrors } from './messages';
 import { tokenConfig } from './auth';
 
-import { GET_REPORTS, DELETE_REPORT, ADD_REPORT, CLEAR_REPORTS } from "./types";
+import { GET_REPORTS, DELETE_REPORT, ADD_REPORT, CLEAR_REPORTS, ACCEPT_REPORT } from "./types";
 
 // GET REPORTS
 export const getReports = (data, showMessage = false) => (dispatch, getState) => {
@@ -63,4 +63,17 @@ export const clearReports = (id) => (dispatch, getState) => {
     dispatch({
         type: CLEAR_REPORTS,
     });
+};
+
+// ACCEPT REPORTS
+export const acceptReport = (id) => (dispatch, getState) => {
+    axios.patch(`/api/reports/${id}/accept`, tokenConfig(getState), { withCredentials: true }, { "is_accepted": "true" })
+        .then(res => {
+            dispatch({
+                type: ACCEPT_REPORT,
+                payload: id,
+            });
+            dispatch(createMessage({ acceptReport: 'Zaakceptowano raport' }));
+        })
+        .catch((err) => dispatch(returnErrors(err.response.data, err.response.status)));
 };

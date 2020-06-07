@@ -29,6 +29,7 @@ export class Alerts extends Component {
             if (message.enterData) alert.error(message.enterData);
             if (message.deleteRaport) alert.success(message.deleteRaport);
             if (message.pullReports) alert.success(message.pullReports);
+            if (message.acceptReport) alert.success(message.acceptReport);
         }
     }
 

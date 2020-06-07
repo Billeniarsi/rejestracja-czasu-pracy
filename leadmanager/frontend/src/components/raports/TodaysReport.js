@@ -45,7 +45,7 @@ export class TodaysReport extends Component {
     }
 
     displayTasks() {
-        const { reports } = this.props;
+        const { reports, auth } = this.props;
         if (reports[0]) {
             return reports.map(report => (
                 <tr key={report.id}>
@@ -54,10 +54,6 @@ export class TodaysReport extends Component {
                     <td>{this.displayTime(report.time)}</td>
                     <td>{this.displayTime(report.overtime)}</td>
                     {report.is_accepted ? <td>Zaakceptowany</td> : <td>Niezaakceptowany</td>}
-                    {report.is_accepted ?
-                        <td><button title="Nie można edytować zaakceptowanego raportu" className="btn btn-success disabled">Edytuj</button></td> :
-                        <td><button className="btn btn-success">Edytuj</button></td>
-                    }
                     {report.is_accepted ?
                         <td><button title="Nie można usunąć zaakceptowanego raportu" className="btn btn-danger disabled">Usuń</button></td> :
                         <td><button className="btn btn-danger" onClick={() => this.deleteReport(report.id)}>Usuń</button></td>
@@ -83,7 +79,6 @@ export class TodaysReport extends Component {
                                         <th>Ilość godzin</th>
                                         <th>Ilość nadgodzin</th>
                                         <th>Status</th>
-                                        <th>Edycja</th>
                                         <th>Usunięcie</th>
                                     </tr>
                                 </thead>

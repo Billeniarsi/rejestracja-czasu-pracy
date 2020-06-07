@@ -1,4 +1,4 @@
-import { GET_REPORTS, DELETE_REPORT, ADD_REPORT, CLEAR_REPORTS } from '../actions/types';
+import { GET_REPORTS, DELETE_REPORT, ADD_REPORT, CLEAR_REPORTS, ACCEPT_REPORT } from '../actions/types';
 
 const initialState = {
     reports: {}
@@ -25,6 +25,16 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 reports: []
+            };
+        case ACCEPT_REPORT:
+            return {
+                ...state,
+                reports: state.reports.map(report => {
+                    if (action.payload !== report.id)
+                        return report;
+                    report.is_accepted = true;
+                    return report;
+                })
             };
         default:
             return state;

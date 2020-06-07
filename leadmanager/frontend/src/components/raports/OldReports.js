@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes, { string } from 'prop-types';
 import { connect } from 'react-redux';
-import { getReports, deleteReport, clearReports } from '../../actions/reports';
+import { getReports, deleteReport, clearReports, acceptReport } from '../../actions/reports';
 import { getProjects } from '../../actions/projects';
+import { getUsers } from '../../actions/users';
 
 export class OldReports extends Component {
     state = {
@@ -23,6 +24,8 @@ export class OldReports extends Component {
         getReports: PropTypes.func.isRequired,
         deleteReport: PropTypes.func.isRequired,
         clearReports: PropTypes.func.isRequired,
+        acceptReport: PropTypes.func.isRequired,
+        getUsers: PropTypes.func.isRequired,
     }
 
     componentDidMount() {
@@ -36,9 +39,10 @@ export class OldReports extends Component {
         if (day < 10)
             day = `0${day}`;
 
-        this.setState({ todaysDate: `${year}-${month}-${day}` });
+        this.setState({ todaysDate: `${year}-${month}-${day}`, employeeID: this.props.auth.user.id });
         this.props.getProjects();
         this.props.clearReports();
+        this.props.getUsers();
     }
 
     displayTime(time) {
@@ -54,6 +58,10 @@ export class OldReports extends Component {
 
     deleteReport(id) {
         this.props.deleteReport(id);
+    }
+
+    acceptReport(id) {
+        this.props.acceptReport(id);
     }
 
     selectProject() {
@@ -76,8 +84,24 @@ export class OldReports extends Component {
         }
     }
 
+    selectEmployee() {
+        const { users, auth } = this.props;
+        if (users.users[0])
+            return (
+                <div className="m-md-3">
+                    Wybierz pracownika
+                    <select className="ml-2" name="employeeID" value={this.state.employeeID} onChange={this.onChange}>
+                        <option value={auth.user.id}>Ja ({auth.user.first_name} {auth.user.last_name})</option>
+                        {users.users.map(user => (
+                            <option key={user.id} value={user.id}>{user.first_name} {user.last_name}</option>
+                        ))}
+                    </select>
+                </div>
+            )
+    }
+
     displayReports() {
-        const { reports } = this.props;
+        const { reports, auth } = this.props;
         if (reports[0]) {
             return reports.map(report => (
                 <tr key={report.id}>
@@ -87,16 +111,25 @@ export class OldReports extends Component {
                     <td>{this.displayTime(report.overtime)}</td>
                     {report.is_accepted ? <td>Zaakceptowany</td> : <td>Niezaakceptowany</td>}
                     {report.is_accepted ?
-                        <td><button title="Nie można edytować zaakceptowanego raportu" className="btn btn-success disabled">Edytuj</button></td> :
-                        <td><button className="btn btn-success">Edytuj</button></td>
-                    }
-                    {report.is_accepted ?
                         <td><button title="Nie można usunąć zaakceptowanego raportu" className="btn btn-danger disabled">Usuń</button></td> :
                         <td><button className="btn btn-danger" onClick={() => this.deleteReport(report.id)}>Usuń</button></td>
                     }
+                    {this.acceptButton(report.is_accepted, report.employee, report.id)}
                 </tr>
             ));
         }
+    }
+
+    acceptButton(accepted, employeeID, reportID) {
+        const { auth } = this.props;
+        if (auth.user.is_staff)
+            if (accepted)
+                return <td><button title="Nie można zaakceptować zaakceptowanego raportu" className="btn btn-success disabled">Zaakceptuj</button></td>
+            else if (auth.user.id !== employeeID)
+                return <td><button className="btn btn-success" onClick={() => this.acceptReport(reportID)}>Zaakceptuj</button></td>
+            else
+                return <td><button className="btn btn-success disabled" title="Nie można zaakceptować własnego raportu">Zaakceptuj</button></td>
+
     }
 
     emptyTable() {
@@ -125,6 +158,11 @@ export class OldReports extends Component {
         return (
             <div>
                 <form className="text-center m-md-3">
+                    {this.selectEmployee()}
+                    <div className="text-center m-md-3">
+                        Wybierz projekt z którego mają wyświetlić się raporty
+                        {this.selectProject()}
+                    </div>
                     <div className="text-center m-md-3">
                         <p>Wybierz dzień z którego mają wyświetlić się raporty</p>
                         <input
@@ -136,15 +174,11 @@ export class OldReports extends Component {
                             max={this.state.todaysDate}
                         />
                     </div>
-                    <div className="text-center m-md-3">
-                        Wybierz projekt z którego mają wyświetlić się raporty
-                        {this.selectProject()}
-                    </div>
                     <button type="submit" className="btn btn-success text-center" onClick={this.onSubmit}>Pokaż raporty</button>
                 </form>
                 {reports[0] ? <div className="card mb-4">
                     <div className="card-header">
-                        {this.state.dateDisplay ? <p className="m-0">Raporty z dnia {this.state.dateDisplay}</p> : ""}
+                        {this.state.dateDisplay ? <p className="m-0">Raporty z dnia {this.state.dateDisplay}</p> : <p className="m-0">Raporty ze wszystkich dni</p>}
                         {this.state.selectedProjectDisplay ? <p className="m-0">Raporty z projektu o ID {this.state.selectedProjectDisplay}</p> : ""}
                     </div>
                     <div className="card-body">
@@ -157,8 +191,8 @@ export class OldReports extends Component {
                                         <th>Ilość godzin</th>
                                         <th>Ilość nadgodzin</th>
                                         <th>Status</th>
-                                        <th>Edycja</th>
                                         <th>Usunięcie</th>
+                                        {this.props.auth.user.is_staff ? <th>Akceptacja</th> : ""}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -175,7 +209,9 @@ export class OldReports extends Component {
 
 const mapStateToProps = state => ({
     reports: state.reports.reports,
-    projects: state.projects.projects
+    auth: state.auth,
+    projects: state.projects.projects,
+    users: state.users
 });
 
-export default connect(mapStateToProps, { getReports, deleteReport, getProjects, clearReports })(OldReports);
+export default connect(mapStateToProps, { getReports, deleteReport, getProjects, clearReports, getUsers, acceptReport })(OldReports);

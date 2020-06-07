@@ -42,10 +42,10 @@ class App extends Component {
                                     <Route exact path="/">
                                         <Redirect to="/summaries" />
                                     </Route>
-                                    <PrivateRoute exact path="/summaries" component={Dashboard}></PrivateRoute>
                                     <Route exact path="/register" component={Register}></Route>
                                     <Route exact path="/login" component={Login}></Route>
-                                    <Route exact path="/raports" component={Raports}></Route>
+                                    <PrivateRoute exact path="/summaries" component={Dashboard}></PrivateRoute>
+                                    <PrivateRoute exact path="/raports" component={Raports}></PrivateRoute>
                                 </Switch>
                             </div>
                         </Fragment>

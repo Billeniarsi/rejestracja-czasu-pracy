@@ -16,6 +16,7 @@ export const GET_REPORTS = "GET_REPORTS";
 export const ADD_REPORT = "ADD_REPORT";
 export const DELETE_REPORT = "DELETE_REPORT";
 export const CLEAR_REPORTS = "CLEAR_REPORTS";
+export const ACCEPT_REPORT = "ACCEPT_REPORT";
 
 export const GET_PROJECTS = "GET_PROJECTS";
 export const GET_TASKS = "GET_TASKS";

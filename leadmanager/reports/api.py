@@ -42,11 +42,11 @@ class ReportDetailsAPI(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsReportSender]
 
 
-class ReportAcceptAPI(generics.UpdateAPIView):
+class ReportAcceptAPI(generics.RetrieveUpdateDestroyAPIView):
     queryset = Report.objects.all()
     serializer_class = ReportAcceptSerializer
-
-    permission_classes = [IsStaffMember, ReportNotAccepted]
+    #permission_classes = [permissions.IsAuthenticated]
+    #permission_classes = [IsStaffMember, ReportNotAccepted]
 
     def perform_update(self, serializer):
         serializer.save(is_accepted=True)

@@ -8,6 +8,7 @@ import OldReports from './OldReports';
 export class Reports extends Component {
     state = {
         activePage: "",
+        employeeID: 0
     }
 
     displaySection() {
@@ -22,6 +23,22 @@ export class Reports extends Component {
         }
     }
 
+    displayManageProjects() {
+        const { auth } = this.props;
+        if (auth.user)
+            if (auth.user.is_staff)
+                return (
+                    <div className="col-xl-4 col-md-6">
+                        <div className="card bg-primary text-white mb-4">
+                            <div className="card-footer d-flex align-items-center justify-content-between">
+                                <Link to="/projects" className="small text-white stretched-link">Zarządzanie projektami</Link>
+                                <div className="small text-white"><i className="fas fa-angle-right"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                )
+    }
+
     render() {
         return (
             <div>
@@ -33,6 +50,7 @@ export class Reports extends Component {
                                 <ol className="breadcrumb mb-4">
                                     <li className="breadcrumb-item active">Wyślij raport lub wyszukaj stare raporty i edytuj je.</li>
                                 </ol>
+
                                 <div className="row justify-content-around">
                                     <div className="col-xl-4 col-md-6">
                                         <div className="card bg-primary text-white mb-4">
@@ -51,7 +69,9 @@ export class Reports extends Component {
                                             </div>
                                         </div>
                                     </div>
+                                    {this.displayManageProjects()}
                                 </div>
+
                             </div>
                             <div className="row justify-content-center mt-4">
 
@@ -74,7 +94,7 @@ export class Reports extends Component {
                                 <div className="col-xl-3 col-md-6">
                                     <button className="card bg-info mb-4 pointer w-100">
                                         <div className="card-footer d-flex align-items-center justify-content-center btn text-white w-100" onClick={() => this.setState({ activePage: 'old-reports' })}>
-                                            Stare raporty
+                                            Przeglądaj raporty
                                         </div>
                                     </button>
                                 </div>
@@ -106,7 +126,9 @@ export class Reports extends Component {
     }
 }
 
+
 const mapStateToProps = state => ({
+    auth: state.auth
 });
 
 export default connect(mapStateToProps)(Reports);

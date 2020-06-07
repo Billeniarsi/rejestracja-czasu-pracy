@@ -5,7 +5,8 @@ import { getReports, deleteReport } from '../../actions/reports';
 
 export class TodaysReport extends Component {
     state = {
-        todaysDate: ""
+        todaysDate: "",
+        employeeID: 0
     }
 
     static propTypes = {
@@ -25,7 +26,7 @@ export class TodaysReport extends Component {
             day = `0${day}`;
 
         this.setState({ todaysDate: `${year}-${month}-${day}` });
-        this.props.getReports({ date: `${year}-${month}-${day}` });
+        this.props.getReports({ date: `${year}-${month}-${day}`, employee: this.props.auth.user.id });
     }
 
     displayTime(time) {
@@ -99,7 +100,8 @@ export class TodaysReport extends Component {
 }
 
 const mapStateToProps = state => ({
-    reports: state.reports.reports
+    reports: state.reports.reports,
+    auth: state.auth
 });
 
 export default connect(mapStateToProps, { getReports, deleteReport })(TodaysReport);

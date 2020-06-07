@@ -1,4 +1,4 @@
-import { GET_REPORTS, DELETE_REPORT, ADD_REPORT } from '../actions/types';
+import { GET_REPORTS, DELETE_REPORT, ADD_REPORT, CLEAR_REPORTS } from '../actions/types';
 
 const initialState = {
     reports: {}
@@ -20,6 +20,11 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 reports: state.reports.filter(report => report.id !== action.payload)
+            };
+        case CLEAR_REPORTS:
+            return {
+                ...state,
+                reports: []
             };
         default:
             return state;

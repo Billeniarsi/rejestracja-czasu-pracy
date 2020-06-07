@@ -25,7 +25,7 @@ export class TodaysReport extends Component {
             day = `0${day}`;
 
         this.setState({ todaysDate: `${year}-${month}-${day}` });
-        this.props.getReports(`${year}-${month}-${day}`);
+        this.props.getReports({ date: `${year}-${month}-${day}` });
     }
 
     displayTime(time) {

@@ -66,7 +66,7 @@ export class AddReport extends Component {
                     </div>
                     <div className="text-center m-md-4">
                         <p className="m-0">Wybierz zadanie</p>
-                        <select className="ml-2 w-50" value={this.state.value} onChange={this.selectTaskChange}>
+                        <select className="ml-2 w-50" value={this.state.value} onChange={this.selectTaskChange} >
                             <option key="0" value="0">Wybierz zadanie</option>
                             {tasks.map(task => (
                                 <option key={task.id} value={task.id}>{task.name}</option>
@@ -97,8 +97,8 @@ export class AddReport extends Component {
     }
 
     onSubmit = e => {
-        const { selectedProject, selectedTask, minWorking, hWorking, minOvertime, hOvertime, todaysDate } = this.state;
         e.preventDefault();
+        const { selectedProject, selectedTask, minWorking, hWorking, minOvertime, hOvertime, todaysDate } = this.state;
         if (minOvertime === 0 && hOvertime === 0 && minWorking === 0 && hWorking === 0) {
             alert("Musisz wpisać ilość przepracowanych godzin")
             return;
@@ -124,7 +124,14 @@ export class AddReport extends Component {
             overtime
         };
         this.props.addReport(report);
+        this.setState({
+            minWorking: 0,
+            hWorking: 0,
+            minOvertime: 0,
+            hOvertime: 0
+        });
     };
+
     render() {
         return (
             <div>
@@ -142,7 +149,7 @@ export class AddReport extends Component {
                                 <input type="number" style={{ width: "5%" }} name="hOvertime" value={this.state.hOvertime} onChange={this.onTimeChange} /> godzin i <input type="number" style={{ width: "5%" }} name="minOvertime" value={this.state.minOvertime} onChange={this.onTimeChange} /> minut
                             </div>
                             <div className="text-center">
-                                <button className="btn btn-success text-center" onClick={this.onSubmit}>Wyślij raport</button>
+                                <button type="submit" className="btn btn-success text-center" onClick={this.onSubmit}>Wyślij raport</button>
                             </div>
                         </div>
                     </div>

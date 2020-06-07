@@ -26,7 +26,9 @@ export class Alerts extends Component {
             if (message.addReport) alert.success(message.addReport);
             if (message.passwordNotMatch) alert.error(message.passwordNotMatch);
             if (message.incorrectTime) alert.error(message.incorrectTime);
+            if (message.enterData) alert.error(message.enterData);
             if (message.deleteRaport) alert.success(message.deleteRaport);
+            if (message.pullReports) alert.success(message.pullReports);
         }
     }
 

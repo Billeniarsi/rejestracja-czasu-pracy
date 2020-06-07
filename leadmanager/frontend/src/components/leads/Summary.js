@@ -15,8 +15,6 @@ export class Summary extends Component {
         getSummary: PropTypes.func.isRequired
     }
 
-
-
     componentDidMount() {
         const date = new Date();
         const year = date.getFullYear();
@@ -132,7 +130,7 @@ export class Summary extends Component {
                     </div>
                     <button
                         type="submit"
-                        className="btn btn-primary mb-3"
+                        className="btn btn-success mb-3"
                     >
                         Pokaż podsumowanie
                     </button>

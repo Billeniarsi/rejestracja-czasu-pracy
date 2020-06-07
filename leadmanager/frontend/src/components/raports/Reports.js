@@ -33,7 +33,7 @@ export class Reports extends Component {
                                 <ol className="breadcrumb mb-4">
                                     <li className="breadcrumb-item active">Wyślij raport lub wyszukaj stare raporty i edytuj je.</li>
                                 </ol>
-                                <div className="row">
+                                <div className="row justify-content-around">
                                     <div className="col-xl-4 col-md-6">
                                         <div className="card bg-primary text-white mb-4">
                                             <div className="card-footer d-flex align-items-center justify-content-between">
@@ -47,15 +47,6 @@ export class Reports extends Component {
                                         <div className="card bg-primary text-white mb-4">
                                             <div className="card-footer d-flex align-items-center justify-content-between">
                                                 <Link to="/raports" className="small text-white stretched-link">Raporty</Link>
-                                                <div className="small text-white"><i className="fas fa-angle-right"></i></div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className="col-xl-4 col-md-6">
-                                        <div className="card bg-primary text-white mb-4">
-                                            <div className="card-footer d-flex align-items-center justify-content-between">
-                                                <Link to="/raports" className="small text-white stretched-link">Dzisiejszy raport</Link>
                                                 <div className="small text-white"><i className="fas fa-angle-right"></i></div>
                                             </div>
                                         </div>

@@ -44,11 +44,11 @@ export class TodaysReport extends Component {
         if (reports[0]) {
             return reports.map(report => (
                 <tr key={report.id}>
+                    <td>{report.date}</td>
                     <td>{report.project.name}</td>
                     <td>{report.task_name}</td>
                     <td>{this.displayTime(report.time)}</td>
                     <td>{this.displayTime(report.overtime)}</td>
-                    <td>{report.date}</td>
                     {report.is_accepted ? <td>Zaakceptowany</td> : <td>Niezaakceptowany</td>}
                     {report.is_accepted ?
                         <td><button title="Nie można usunąć zaakceptowanego raportu" className="btn btn-danger disabled">Usuń</button></td> :
@@ -70,11 +70,11 @@ export class TodaysReport extends Component {
                             <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
                                 <thead>
                                     <tr>
+                                        <th>Data raportu</th>
                                         <th>Projekt</th>
                                         <th>Zadanie</th>
                                         <th>Ilość godzin</th>
                                         <th>Ilość nadgodzin</th>
-                                        <th>Data raportu</th>
                                         <th>Status</th>
                                         <th>Usunięcie</th>
                                     </tr>

@@ -94,7 +94,7 @@ export class Summary extends Component {
             <div className="m-md-3">
                 Wybierz projekt
                 <select className="ml-2" value={this.state.projectID} name="projectID" onChange={this.onChange}>
-                    <option key="0" value="0">Wybierz projekt</option>
+                    <option key="0" value="0">Wszystkie projekty</option>
                     {projects.map(project => (
                         <option key={project.id} value={project.id}>{project.name}</option>
                     ))}
@@ -123,7 +123,7 @@ export class Summary extends Component {
     displayTasks() {
         const { summary } = this.props;
         return summary.details.projects.map(project => {
-            if (project.name === this.state.value || this.state.value === "Wszystkie") {
+            if (project.id == this.state.projectID || this.state.projectID == "0") {
                 return project.tasks.map(task => (
                     <tr key={task.id}>
                         <td>{project.name}</td>

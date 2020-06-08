@@ -97,7 +97,7 @@ export class OldReports extends Component {
     }
 
     displayReports() {
-        const { reports, auth } = this.props;
+        const { reports } = this.props;
         if (reports[0]) {
             return reports.map(report => (
                 <tr key={report.id}>

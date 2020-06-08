@@ -4,13 +4,14 @@ import { tokenConfig } from './auth';
 import { GET_SUMMARY } from "./types";
 
 export const getSummary = (body) => (dispatch, getState) => {
-    axios.post(`/api/users/${body.userID}/summaries/`, {
+    axios.post(`/api/users/${body.employeeID}/summaries/`, {
         "start_date": body.startDate,
         "end_date": body.endDate
     },
         tokenConfig(getState),
         { withCredentials: true })
         .then(res => {
+            console.log(res)
             dispatch({
                 type: GET_SUMMARY,
                 payload: res.data,

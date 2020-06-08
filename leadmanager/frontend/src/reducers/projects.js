@@ -11,6 +11,11 @@ export default function (state = initialState, action) {
                 ...state,
                 projects: action.payload
             };
+        case ADD_PROJECT:
+            return {
+                ...state,
+                projects: [...state.projects, action.payload]
+            };
         case EDIT_PROJECT:
             return {
                 ...state,

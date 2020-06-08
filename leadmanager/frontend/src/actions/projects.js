@@ -22,6 +22,10 @@ export const addProject = (project) => (dispatch, getState) => {
     axios
         .post(`/api/projects/`, project, tokenConfig(getState))
         .then((res) => {
+            dispatch({
+                type: ADD_PROJECT,
+                payload: res.data,
+            });
             dispatch(createMessage({ addProject: 'Projekt został dodany' }));
         })
         .catch((err) => dispatch(returnErrors(err.response.data, err.response.status)));

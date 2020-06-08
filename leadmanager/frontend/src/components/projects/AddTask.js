@@ -54,7 +54,7 @@ export class AddTask extends Component {
                     <div className="text-center m-md-2">
                         <p className="m-md-1">Wybierz projekt do którego chcesz dodać zadanie</p>
                         {this.selectProject()}
-                        <p className="m-md-1">Wybierz nazwę zadania nazwę projektu</p>
+                        <p className="m-md-1">Wybierz nazwę zadania</p>
                         <input
                             type="text"
                             name="taskName"

@@ -47,13 +47,8 @@ export class OldReports extends Component {
 
     displayTime(time) {
         let min = time % 60;
-        if (min < 10) {
-            min = `0${min}`;
-        } else if (min == 0) {
-            min = "00";
-        }
         const h = Math.floor(time / 60);
-        return `${h}:${min}`;
+        return `${h} godzin ${min} minut`;
     }
 
     deleteReport(id) {

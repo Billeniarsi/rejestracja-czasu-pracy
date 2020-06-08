@@ -39,17 +39,6 @@ export class AddReport extends Component {
         this.props.getProjects();
     }
 
-    displayTime(time) {
-        let min = time % 60;
-        if (min < 10) {
-            min = `0${min}`;
-        } else if (min == 0) {
-            min = "00";
-        }
-        const h = Math.floor(time / 60);
-        return `${h}:${min}`;
-    }
-
     selectProject() {
         const { projects } = this.props.projects;
         const { tasks } = this.props.tasks;

@@ -4,7 +4,7 @@ import { getSummary, clearSummary } from '../../actions/summary';
 import { getUsers } from '../../actions/users';
 import { connect } from 'react-redux';
 import { getProjects } from '../../actions/projects';
-import { getOverview } from '../../actions/overview';
+import { getOverview, clearOverview } from '../../actions/overview';
 
 export class Summary extends Component {
     state = {
@@ -40,6 +40,7 @@ export class Summary extends Component {
         this.props.getUsers();
         this.props.getProjects();
         this.props.clearSummary();
+        this.props.clearOverview();
     }
 
     displayTime(time) {
@@ -150,6 +151,8 @@ export class Summary extends Component {
     handleChange = e => this.setState({ value: e.target.value });
     onSubmit = e => {
         e.preventDefault();
+        this.props.clearSummary();
+        this.props.clearOverview();
         const { startDate, endDate, employeeID, projectID } = this.state;
         const employee = { startDate, endDate, employeeID };
         const project = { startDate, endDate, projectID };
@@ -288,4 +291,4 @@ const mapStateToProps = state => ({
     projects: state.projects.projects,
 });
 
-export default connect(mapStateToProps, { getSummary, getUsers, getProjects, getOverview, clearSummary })(Summary);
+export default connect(mapStateToProps, { getSummary, getUsers, getProjects, getOverview, clearSummary, clearOverview })(Summary);

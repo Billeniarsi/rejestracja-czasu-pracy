@@ -29,5 +29,6 @@ export const GET_SUMMARY = "GET_SUMMARY";
 export const CLEAR_SUMMARY = "CLEAR_SUMMARY";
 
 export const GET_OVERVIEW = "GET_OVERVIEW";
+export const CLEAR_OVERVIEW = "CLEAR_OVERVIEW";
 
 export const GET_USERS = "GET_USERS";

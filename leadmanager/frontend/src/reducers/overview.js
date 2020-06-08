@@ -1,4 +1,4 @@
-import { GET_OVERVIEW } from '../actions/types';
+import { GET_OVERVIEW, CLEAR_OVERVIEW } from '../actions/types';
 
 const initialState = {
     overview: {}
@@ -10,6 +10,11 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 overview: action.payload
+            };
+        case CLEAR_OVERVIEW:
+            return {
+                ...state,
+                overview: []
             };
         default:
             return state;

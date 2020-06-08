@@ -1,7 +1,7 @@
 import axios from "axios";
 import { createMessage, returnErrors } from './messages';
 import { tokenConfig } from './auth';
-import { GET_OVERVIEW } from "./types";
+import { GET_OVERVIEW, CLEAR_OVERVIEW } from "./types";
 
 export const getOverview = (body) => (dispatch, getState) => {
     axios.post(`/api/projects/${body.projectID}/overviews/`, {
@@ -18,3 +18,9 @@ export const getOverview = (body) => (dispatch, getState) => {
         })
         .catch((err) => dispatch(returnErrors(err.response.data, err.response.status)));
 }
+
+export const clearOverview = (id) => (dispatch) => {
+    dispatch({
+        type: CLEAR_OVERVIEW,
+    });
+};

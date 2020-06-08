@@ -8,13 +8,14 @@ import { addReport } from '../../actions/reports';
 export class AddReport extends Component {
     state = {
         todaysDate: "",
+        raportDate: "",
         selectedProject: 0,
         selectedTask: 0,
         minWorking: 0,
         hWorking: 0,
         minOvertime: 0,
         hOvertime: 0,
-        regexp: /^[0-9\b]+$/
+        regexp: /^[0-9\b]+$/,
     }
 
     static propTypes = {
@@ -34,7 +35,7 @@ export class AddReport extends Component {
         if (day < 10)
             day = `0${day}`;
 
-        this.setState({ todaysDate: `${year}-${month}-${day}` });
+        this.setState({ todaysDate: `${year}-${month}-${day}`, raportDate: `${year}-${month}-${day}` });
         this.props.getProjects();
     }
 
@@ -98,7 +99,7 @@ export class AddReport extends Component {
 
     onSubmit = e => {
         e.preventDefault();
-        const { selectedProject, selectedTask, minWorking, hWorking, minOvertime, hOvertime, todaysDate } = this.state;
+        const { selectedProject, selectedTask, minWorking, hWorking, minOvertime, hOvertime, raportDate } = this.state;
         if (minOvertime === 0 && hOvertime === 0 && minWorking === 0 && hWorking === 0) {
             alert("Musisz wpisać ilość przepracowanych godzin")
             return;
@@ -119,7 +120,7 @@ export class AddReport extends Component {
         const overtime = this.time2min(hOvertime, minOvertime);
         const report = {
             task: selectedTask,
-            date: todaysDate,
+            date: raportDate,
             time,
             overtime
         };
@@ -136,7 +137,7 @@ export class AddReport extends Component {
         return (
             <div>
                 <div className="card mb-4">
-                    <div className="card-header">Wyślij raport z dziś ({this.state.todaysDate})</div>
+                    <div className="card-header">Wyślij raport</div>
                     <div className="card-body">
                         <div className="table-responsive">
                             {this.selectProject()}
@@ -147,6 +148,10 @@ export class AddReport extends Component {
                             <div className="text-center m-md-5">
                                 <p className="m-md-1">Wpisz ile <strong>nadgodzin</strong> spędziłeś przy tym zadaniu</p>
                                 <input type="number" style={{ width: "5%" }} name="hOvertime" value={this.state.hOvertime} onChange={this.onTimeChange} /> godzin i <input type="number" style={{ width: "5%" }} name="minOvertime" value={this.state.minOvertime} onChange={this.onTimeChange} /> minut
+                            </div>
+                            <div className="text-center m-md-5">
+                                <p className="m-md-1">Wybierz datę raportu</p>
+                                <input type="date" name="raportDate" value={this.state.raportDate} max={this.state.todaysDate} onChange={this.onChange} />
                             </div>
                             <div className="text-center">
                                 <button type="submit" className="btn btn-success text-center" onClick={this.onSubmit}>Wyślij raport</button>

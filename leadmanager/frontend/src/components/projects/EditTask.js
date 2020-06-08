@@ -52,7 +52,7 @@ export class EditTask extends Component {
                 </div>
             )
         } else {
-            return <div>Nie ma żadnych dostępnych projektów.</div>
+            return <div>Nie ma żadnych dostępnych zadań</div>
         }
     }
 

@@ -129,22 +129,22 @@ export class AddReport extends Component {
                     <div className="card-header">Wyślij raport</div>
                     <div className="card-body">
                         <div className="table-responsive">
-                            {this.selectProject()}
-                            <div className="text-center m-md-5">
-                                <p className="m-md-1">Wpisz ile czasu spędziłeś przy tym zadaniu</p>
-                                <input type="number" style={{ width: "5%" }} name="hWorking" value={this.state.hWorking} onChange={this.onTimeChange} /> godzin i <input type="number" style={{ width: "5%" }} name="minWorking" value={this.state.minWorking} onChange={this.onTimeChange} /> minut
-                            </div>
-                            <div className="text-center m-md-5">
-                                <p className="m-md-1">Wpisz ile <strong>nadgodzin</strong> spędziłeś przy tym zadaniu</p>
-                                <input type="number" style={{ width: "5%" }} name="hOvertime" value={this.state.hOvertime} onChange={this.onTimeChange} /> godzin i <input type="number" style={{ width: "5%" }} name="minOvertime" value={this.state.minOvertime} onChange={this.onTimeChange} /> minut
-                            </div>
-                            <div className="text-center m-md-5">
-                                <p className="m-md-1">Wybierz datę raportu</p>
-                                <input type="date" name="raportDate" value={this.state.raportDate} max={this.state.todaysDate} onChange={this.onChange} />
-                            </div>
-                            <div className="text-center">
-                                <button type="submit" className="btn btn-success text-center" onClick={this.onSubmit}>Wyślij raport</button>
-                            </div>
+                            <form onSubmit={this.onSubmit} className="text-center">
+                                {this.selectProject()}
+                                <div className="m-md-5">
+                                    <p className="m-md-1">Wpisz ile czasu spędziłeś przy tym zadaniu</p>
+                                    <input type="number" style={{ width: "5%" }} name="hWorking" value={this.state.hWorking} onChange={this.onTimeChange} /> godzin i <input type="number" style={{ width: "5%" }} name="minWorking" value={this.state.minWorking} onChange={this.onTimeChange} /> minut
+                                </div>
+                                <div className="m-md-5">
+                                    <p className="m-md-1">Wpisz ile <strong>nadgodzin</strong> spędziłeś przy tym zadaniu</p>
+                                    <input type="number" style={{ width: "5%" }} name="hOvertime" value={this.state.hOvertime} onChange={this.onTimeChange} /> godzin i <input type="number" style={{ width: "5%" }} name="minOvertime" value={this.state.minOvertime} onChange={this.onTimeChange} /> minut
+                                </div>
+                                <div className="m-md-5">
+                                    <p className="m-md-1">Wybierz datę raportu</p>
+                                    <input type="date" name="raportDate" value={this.state.raportDate} max={this.state.todaysDate} onChange={this.onChange} />
+                                </div>
+                                <button type="submit" className="btn btn-success mb-3">Wyślij raport</button>
+                            </form>
                         </div>
                     </div>
                 </div>

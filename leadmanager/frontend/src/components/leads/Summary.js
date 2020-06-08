@@ -198,12 +198,7 @@ export class Summary extends Component {
                     </div>
                     {auth.user.is_staff ? this.selectSummary() : ""}
                     {this.state.selectSummary === "employee" ? this.selectEmployee() : this.selectProject()}
-                    <button
-                        type="submit"
-                        className="btn btn-success mb-3"
-                    >
-                        Pokaż podsumowanie
-                    </button>
+                    <button type="submit" className="btn btn-success mb-3">Pokaż podsumowanie</button>
                 </form>
                 {summary.start_date &&
                     <div className="card mb-4">

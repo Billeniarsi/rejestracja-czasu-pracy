@@ -31,7 +31,7 @@ export class EditProject extends Component {
                 </div>
             )
         } else {
-            return <div>Nie ma żadnych dostępnych projektów.</div>
+            return <div>Nie ma żadnych dostępnych projektów</div>
         }
     }
 

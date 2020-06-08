@@ -107,10 +107,7 @@ export class OldReports extends Component {
                     <td>{this.displayTime(report.time)}</td>
                     <td>{this.displayTime(report.overtime)}</td>
                     {report.is_accepted ? <td>Zaakceptowany</td> : <td>Niezaakceptowany</td>}
-                    {report.is_accepted ?
-                        <td><button title="Nie można usunąć zaakceptowanego raportu" className="btn btn-danger disabled">Usuń</button></td> :
-                        <td><button className="btn btn-danger" onClick={() => this.deleteReport(report.id)}>Usuń</button></td>
-                    }
+                    {this.deleteButton(report.is_accepted, report.employee, report.id)}
                     {this.acceptButton(report.is_accepted, report.employee, report.id)}
                 </tr>
             ));
@@ -127,6 +124,17 @@ export class OldReports extends Component {
             else
                 return <td><button className="btn btn-success disabled" title="Nie można zaakceptować własnego raportu">Zaakceptuj</button></td>
 
+    }
+
+    deleteButton(accepted, employeeID, reportID) {
+        const { auth } = this.props;
+        if (auth.user.is_staff)
+            if (accepted)
+                return <td><button title="Nie można usunąć zaakceptowanego raportu" className="btn btn-danger disabled">Usuń</button></td>
+            else if (auth.user.id === employeeID)
+                return <td><button className="btn btn-danger" onClick={() => this.deleteReport(reportID)}>Usuń</button></td>
+            else
+                return <td><button title="Nie można usunąć czyjegoś raportu" className="btn btn-danger disabled">Usuń</button></td>
     }
 
     emptyTable() {

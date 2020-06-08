@@ -19,7 +19,11 @@ export const CLEAR_REPORTS = "CLEAR_REPORTS";
 export const ACCEPT_REPORT = "ACCEPT_REPORT";
 
 export const GET_PROJECTS = "GET_PROJECTS";
+export const ADD_PROJECT = "ADD_PROJECT";
+export const EDIT_PROJECT = "EDIT_PROJECT";
+
 export const GET_TASKS = "GET_TASKS";
+export const EDIT_TASK = "EDIT_TASK";
 
 export const GET_SUMMARY = "GET_SUMMARY";
 

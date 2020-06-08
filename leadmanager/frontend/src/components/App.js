@@ -18,6 +18,8 @@ import Login from './accounts/Login';
 import Register from './accounts/Register';
 import { loadUser } from '../actions/auth';
 
+import ManageProjects from './projects/ManageProjects';
+
 
 // Alert Options
 const alertOptions = {
@@ -46,6 +48,7 @@ class App extends Component {
                                     <Route exact path="/login" component={Login}></Route>
                                     <PrivateRoute exact path="/summaries" component={Dashboard}></PrivateRoute>
                                     <PrivateRoute exact path="/raports" component={Raports}></PrivateRoute>
+                                    <PrivateRoute exact path="/projects" component={ManageProjects}></PrivateRoute>
                                 </Switch>
                             </div>
                         </Fragment>

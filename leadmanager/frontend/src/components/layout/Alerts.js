@@ -30,6 +30,10 @@ export class Alerts extends Component {
             if (message.deleteRaport) alert.success(message.deleteRaport);
             if (message.pullReports) alert.success(message.pullReports);
             if (message.acceptReport) alert.success(message.acceptReport);
+            if (message.addProject) alert.success(message.addProject);
+            if (message.editProject) alert.success(message.editProject);
+            if (message.addTask) alert.success(message.addTask);
+            if (message.editTask) alert.success(message.editTask);
         }
     }
 

@@ -1,4 +1,4 @@
-import { GET_TASKS } from '../actions/types';
+import { GET_TASKS, EDIT_TASK } from '../actions/types';
 
 const initialState = {
     tasks: []
@@ -10,6 +10,16 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 tasks: action.payload
+            };
+        case EDIT_TASK:
+            return {
+                ...state,
+                tasks: state.tasks.map(task => {
+                    if (action.payload.id !== task.id)
+                        return task;
+                    if (action.payload.name) task.name = action.payload.name;
+                    return task;
+                })
             };
         default:
             return state;

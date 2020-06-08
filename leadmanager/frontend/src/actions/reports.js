@@ -67,7 +67,7 @@ export const clearReports = (id) => (dispatch, getState) => {
 
 // ACCEPT REPORTS
 export const acceptReport = (id) => (dispatch, getState) => {
-    axios.patch(`/api/reports/${id}/accept`, tokenConfig(getState), { withCredentials: true }, { "is_accepted": "true" })
+    axios.patch(`/api/reports/${id}/accept`, { "is_accepted": "true" }, tokenConfig(getState))
         .then(res => {
             dispatch({
                 type: ACCEPT_REPORT,

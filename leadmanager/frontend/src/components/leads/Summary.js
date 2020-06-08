@@ -94,7 +94,7 @@ export class Summary extends Component {
             <div className="m-md-3">
                 Wybierz projekt
                 <select className="ml-2" value={this.state.projectID} name="projectID" onChange={this.onChange}>
-                    <option key="0" value="0">Wszystkie projekty</option>
+                    <option key="0" value="0">Wybierz projekt</option>
                     {projects.map(project => (
                         <option key={project.id} value={project.id}>{project.name}</option>
                     ))}

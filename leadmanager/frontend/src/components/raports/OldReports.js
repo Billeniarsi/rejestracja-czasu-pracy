@@ -128,13 +128,12 @@ export class OldReports extends Component {
 
     deleteButton(accepted, employeeID, reportID) {
         const { auth } = this.props;
-        if (auth.user.is_staff)
-            if (accepted)
-                return <td><button title="Nie można usunąć zaakceptowanego raportu" className="btn btn-danger disabled">Usuń</button></td>
-            else if (auth.user.id === employeeID)
-                return <td><button className="btn btn-danger" onClick={() => this.deleteReport(reportID)}>Usuń</button></td>
-            else
-                return <td><button title="Nie można usunąć czyjegoś raportu" className="btn btn-danger disabled">Usuń</button></td>
+        if (accepted)
+            return <td><button title="Nie można usunąć zaakceptowanego raportu" className="btn btn-danger disabled">Usuń</button></td>
+        else if (auth.user.id === employeeID)
+            return <td><button className="btn btn-danger" onClick={() => this.deleteReport(reportID)}>Usuń</button></td>
+        else
+            return <td><button title="Nie można usunąć czyjegoś raportu" className="btn btn-danger disabled">Usuń</button></td>
     }
 
     emptyTable() {

@@ -3,6 +3,8 @@ import PropTypes, { string } from 'prop-types';
 import { getSummary } from '../../actions/summary';
 import { getUsers } from '../../actions/users';
 import { connect } from 'react-redux';
+import { getProjects } from '../../actions/projects';
+import { getOverview } from '../../actions/overview';
 
 export class Summary extends Component {
     state = {
@@ -10,12 +12,16 @@ export class Summary extends Component {
         startDate: '',
         endDate: '',
         value: 'Wszystkie',
-        employeeID: 0
+        employeeID: 0,
+        projectID: 0,
+        selectSummary: 'employee'
     }
 
     static propTypes = {
         getSummary: PropTypes.func.isRequired,
+        getOverview: PropTypes.func.isRequired,
         getUsers: PropTypes.func.isRequired,
+        getProjects: PropTypes.func.isRequired,
     }
 
     componentDidMount() {
@@ -31,6 +37,7 @@ export class Summary extends Component {
 
         this.setState({ todaysDate: `${year}-${month}-${day}`, employeeID: this.props.auth.user.id });
         this.props.getUsers();
+        this.props.getProjects();
     }
 
     displayTime(time) {
@@ -71,19 +78,48 @@ export class Summary extends Component {
         ));
     }
 
+    selectSummary() {
+        return (
+            <div className="m-md-3">
+                Pokaż podsumowanie dla
+                <select className="ml-2" name="selectSummary" onChange={this.onChange}>
+                    <option value="employee">Pracownika</option>
+                    <option value="project">Projektu</option>
+                </select>
+            </div>
+        )
+    }
+
     selectProject() {
-        const { summary } = this.props;
+        const { projects } = this.props;
         return (
             <div className="m-md-3">
                 Wybierz projekt
-                <select className="ml-2" value={this.state.value} onChange={this.handleChange}>
-                    <option value="Wszystkie">Wszystkie</option>
-                    {summary.details.projects.map(project => (
-                        <option key={project.id} value={project.name}>{project.name}</option>
+                <select className="ml-2" value={this.state.projectID} name="projectID" onChange={this.onChange}>
+                    <option key="0" value="0">Wybierz projekt</option>
+                    {projects.map(project => (
+                        <option key={project.id} value={project.id}>{project.name}</option>
                     ))}
                 </select>
             </div>
         )
+    }
+
+    selectEmployee() {
+        const { users, auth } = this.props;
+        if (auth.user.is_staff)
+            if (users.users[0])
+                return (
+                    <div className="m-md-3">
+                        Wybierz pracownika
+                        <select className="ml-2" name="employeeID" value={this.state.employeeID} onChange={this.onChange}>
+                            <option value={auth.user.id}>Ja ({auth.user.first_name} {auth.user.last_name})</option>
+                            {users.users.map(user => (
+                                <option key={user.id} value={user.id}>{user.first_name} {user.last_name}</option>
+                            ))}
+                        </select>
+                    </div>
+                )
     }
 
     displayTasks() {
@@ -102,21 +138,35 @@ export class Summary extends Component {
         });
     }
 
+    displayProjectTasks() {
+        const { overview } = this.props;
+        return overview.details.tasks.map(task => (
+            <tr key={task.id}>
+                <td>{task.name}</td>
+                <td>{this.displayTime(task.time)}</td>
+                <td>{this.displayTime(task.overtime)}</td>
+            </tr>
+        ));
+    }
+
     onChange = e => this.setState({ [e.target.name]: e.target.value });
     handleChange = e => this.setState({ value: e.target.value });
     onSubmit = e => {
         e.preventDefault();
-        const userID = this.state.employeeID;
-        const { startDate, endDate } = this.state;
-        const body = { startDate, endDate, userID };
-        this.props.getSummary(body);
+        const { startDate, endDate, employeeID, projectID } = this.state;
+        const employee = { startDate, endDate, employeeID };
+        const project = { startDate, endDate, projectID };
+        if (this.state.selectSummary === "employee")
+            this.props.getSummary(employee);
+        else
+            this.props.getOverview(project);
         this.setState({
             startDate: '',
             endDate: '',
         });
     };
     render() {
-        const { summary, auth } = this.props;
+        const { summary, auth, overview } = this.props;
         return (
             <div>
                 <form onSubmit={this.onSubmit}>
@@ -146,7 +196,8 @@ export class Summary extends Component {
                             />
                         </div>
                     </div>
-                    {auth.user.is_staff ? this.employeersSelect() : ""}
+                    {auth.user.is_staff ? this.selectSummary() : ""}
+                    {this.state.selectSummary === "employee" ? this.selectEmployee() : this.selectProject()}
                     <button
                         type="submit"
                         className="btn btn-success mb-3"
@@ -193,6 +244,40 @@ export class Summary extends Component {
                             </div>
                         </div>
                     </div>}
+                {overview.start_date &&
+                    <div className="card mb-4">
+                        <div className="card-header">Podsumowanie od dnia: {overview.start_date}, do dnia: {overview.end_date} <br /> Podsumowanie dla projektu: {overview.project_name}<strong></strong></div>
+                        <div className="card-body">
+                            <div className="table-responsive">
+                                <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Ilość godzin poświęconych na projekt</th>
+                                            <th>Ilość nadgodzin poświęconych na projekt</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>{this.displayTime(overview.details.time)}</td>
+                                            <td>{this.displayTime(overview.details.overtime)}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <table className="table table-bordered" id="dataTable" width="100%" cellSpacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Zadanie</th>
+                                            <th>Ilość godzin poświęconych na zadanie</th>
+                                            <th>Ilość nadgodzin poświęconych na zadanie</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {this.displayProjectTasks()}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>}
             </div>
         )
     }
@@ -200,8 +285,10 @@ export class Summary extends Component {
 
 const mapStateToProps = state => ({
     summary: state.summary.summary,
+    overview: state.overview.overview,
     auth: state.auth,
     users: state.users,
+    projects: state.projects.projects,
 });
 
-export default connect(mapStateToProps, { getSummary, getUsers })(Summary);
+export default connect(mapStateToProps, { getSummary, getUsers, getProjects, getOverview })(Summary);

@@ -86,18 +86,19 @@ export class OldReports extends Component {
 
     selectEmployee() {
         const { users, auth } = this.props;
-        if (users.users[0])
-            return (
-                <div className="m-md-3">
-                    Wybierz pracownika
-                    <select className="ml-2" name="employeeID" value={this.state.employeeID} onChange={this.onChange}>
-                        <option value={auth.user.id}>Ja ({auth.user.first_name} {auth.user.last_name})</option>
-                        {users.users.map(user => (
-                            <option key={user.id} value={user.id}>{user.first_name} {user.last_name}</option>
-                        ))}
-                    </select>
-                </div>
-            )
+        if (auth.user.is_staff)
+            if (users.users[0])
+                return (
+                    <div className="m-md-3">
+                        Wybierz pracownika
+                        <select className="ml-2" name="employeeID" value={this.state.employeeID} onChange={this.onChange}>
+                            <option value={auth.user.id}>Ja ({auth.user.first_name} {auth.user.last_name})</option>
+                            {users.users.map(user => (
+                                <option key={user.id} value={user.id}>{user.first_name} {user.last_name}</option>
+                            ))}
+                        </select>
+                    </div>
+                )
     }
 
     displayReports() {

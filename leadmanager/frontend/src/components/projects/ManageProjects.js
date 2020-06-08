@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import AddProject from './AddProject';
 import AddTask from './AddTask';
@@ -44,6 +44,8 @@ export class ManageProjects extends Component {
 
     render() {
         const { summary, auth, overview } = this.props;
+        if (!auth.user.is_staff)
+            return <Redirect to="/summaries" />;
         return (
             <div>
                 <div id="layoutSidenav">

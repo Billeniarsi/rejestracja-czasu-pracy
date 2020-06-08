@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes, { string } from 'prop-types';
-import { getSummary } from '../../actions/summary';
+import { getSummary, clearSummary } from '../../actions/summary';
 import { getUsers } from '../../actions/users';
 import { connect } from 'react-redux';
 import { getProjects } from '../../actions/projects';
@@ -19,6 +19,7 @@ export class Summary extends Component {
 
     static propTypes = {
         getSummary: PropTypes.func.isRequired,
+        clearSummary: PropTypes.func.isRequired,
         getOverview: PropTypes.func.isRequired,
         getUsers: PropTypes.func.isRequired,
         getProjects: PropTypes.func.isRequired,
@@ -38,6 +39,7 @@ export class Summary extends Component {
         this.setState({ todaysDate: `${year}-${month}-${day}`, employeeID: this.props.auth.user.id });
         this.props.getUsers();
         this.props.getProjects();
+        this.props.clearSummary();
     }
 
     displayTime(time) {
@@ -291,4 +293,4 @@ const mapStateToProps = state => ({
     projects: state.projects.projects,
 });
 
-export default connect(mapStateToProps, { getSummary, getUsers, getProjects, getOverview })(Summary);
+export default connect(mapStateToProps, { getSummary, getUsers, getProjects, getOverview, clearSummary })(Summary);

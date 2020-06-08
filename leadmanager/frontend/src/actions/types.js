@@ -26,6 +26,7 @@ export const GET_TASKS = "GET_TASKS";
 export const EDIT_TASK = "EDIT_TASK";
 
 export const GET_SUMMARY = "GET_SUMMARY";
+export const CLEAR_SUMMARY = "CLEAR_SUMMARY";
 
 export const GET_OVERVIEW = "GET_OVERVIEW";
 

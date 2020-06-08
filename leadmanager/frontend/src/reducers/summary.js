@@ -1,4 +1,4 @@
-import { GET_SUMMARY } from '../actions/types';
+import { GET_SUMMARY, CLEAR_SUMMARY } from '../actions/types';
 
 const initialState = {
     summary: {}
@@ -10,6 +10,11 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 summary: action.payload
+            };
+        case CLEAR_SUMMARY:
+            return {
+                ...state,
+                summary: []
             };
         default:
             return state;

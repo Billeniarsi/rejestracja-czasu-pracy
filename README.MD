@@ -30,4 +30,4 @@ Hasło: ``kierownik``
 #### Pracownik
 Nazwa użytkownika: ``Pracownik1``
 Hasło: ``pracownik``
-#### Strona zawiera również konto admina, ale dostęp do niego mają tylko wybrani.
+#### Strona zawiera również konto admina przez które można dodawać nowe konta, ale dostęp do niego mają tylko wybrani.
